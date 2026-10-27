@@ -1,0 +1,382 @@
+/* Styles owned by the Services / Gallery / FAQ / Contact lane.
+   Shared primitives (.container, .section, .section__head, .btn, .icon, .reveal,
+   .visually-hidden, .callout, .sheet) come from app.css — only scoped additions live here. */
+
+/* ---------------- Services ---------------- */
+.services__lead {
+  margin-top: var(--space-3);
+  color: var(--c-ink-muted);
+}
+
+.services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 900px) {
+  .services__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  transition:
+    transform var(--dur-2) var(--ease-out),
+    box-shadow var(--dur-2) var(--ease-out),
+    border-color var(--dur-2) var(--ease-out);
+}
+
+/* :focus-within is the keyboard twin of :hover (the trigger is the only focusable child). */
+.svc-card:hover,
+.svc-card:focus-within {
+  border-color: color-mix(in srgb, var(--c-teal-600) 35%, transparent);
+  box-shadow: var(--sh-2);
+  transform: translateY(-2px);
+}
+
+.svc-card__icon {
+  color: var(--c-teal-600);
+  margin-bottom: var(--space-1);
+}
+
+.svc-card__title {
+  font-size: var(--fs-h3);
+}
+
+.svc-card__tagline {
+  color: var(--c-ink-muted);
+}
+
+.svc-card__price {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.svc-card__more {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* ---------------- Service dialog ---------------- */
+.sheet__head {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-3);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.sheet__head h3 {
+  margin: 0;
+  color: var(--c-teal-700);
+}
+
+.sheet__close {
+  flex: none;
+  min-width: 44px;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--c-ink-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sheet__close:hover,
+.sheet__close:focus-visible {
+  background: var(--c-teal-100);
+  color: var(--c-ink);
+}
+
+.sheet__body {
+  padding: var(--space-5);
+}
+
+.sheet__body p {
+  margin-bottom: var(--space-3);
+}
+
+.sheet__body p:last-child {
+  margin-bottom: 0;
+}
+
+.price-list {
+  margin: var(--space-4) 0;
+  border-top: 1px solid var(--c-line);
+}
+
+.price-list__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.price-list dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--c-teal-700);
+  white-space: nowrap;
+}
+
+/* ---------------- FAQ ---------------- */
+.faq {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 800px;
+  margin: var(--space-6) auto 0;
+}
+
+.faq__item {
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  transition: background var(--dur-2) var(--ease-out);
+}
+
+.faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: var(--space-4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary h3 {
+  margin: 0;
+  font-size: var(--fs-lg);
+}
+
+/* Open state signals three ways: tint, hairlines and the rotated glyph. */
+.faq__item[open] {
+  background: var(--c-teal-100);
+  border-color: var(--c-line);
+}
+
+.faq__item[open] summary {
+  border-bottom: 1px solid var(--c-line);
+}
+
+.faq__item p {
+  padding: var(--space-4);
+}
+
+.faq__glyph {
+  position: relative;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--c-teal-600);
+}
+
+.faq__glyph::before,
+.faq__glyph::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 2px;
+  background: currentColor;
+  transform: translateY(-50%);
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.faq__glyph::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+/* Collapse the vertical bar so the plus becomes a minus. */
+.faq__item[open] .faq__glyph::after {
+  transform: translateY(-50%) rotate(90deg) scaleX(0);
+}
+
+/* ---------------- Gallery ---------------- */
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 640px) {
+  .gallery__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (min-width: 900px) {
+  .gallery__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+}
+
+.tile {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  /* 3:2 = the ratio of the generated derivatives; a 1:1 tile would clip the
+     arch ends off g01/g02/g05/g10 (spec §4.5 predates the pre-computed assets) */
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: var(--c-line);
+  cursor: pointer;
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-2) var(--ease-out);
+}
+
+.tile:hover img,
+.tile:focus-visible img {
+  transform: scale(1.03);
+}
+
+/* ---------------- Lightbox ---------------- */
+dialog.sheet--lightbox {
+  max-width: min(1100px, 92vw);
+}
+
+.lightbox__img {
+  width: 100%;
+  height: auto;
+  max-height: 70dvh;
+  object-fit: contain;
+  background: var(--c-ink);
+}
+
+.lightbox__caption {
+  padding: var(--space-3) var(--space-5);
+  color: var(--c-ink-muted);
+}
+
+.lightbox__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.lightbox__preload {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------------- Contact ---------------- */
+.contact {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .contact {
+    grid-template-columns: 1fr 1.2fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.contact__address {
+  font-style: normal;
+}
+
+.contact__address strong {
+  font-size: var(--fs-lg);
+  color: var(--c-teal-700);
+}
+
+.contact__phones {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  max-width: none;
+}
+
+@media (min-width: 640px) {
+  .contact__phones {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact__hours {
+  margin-bottom: var(--space-4);
+}
+
+.contact__label {
+  font-weight: 600;
+  color: var(--c-ink-muted);
+}
+
+/* ---------------- Map facade ---------------- */
+.map__facade,
+.map__frame {
+  width: 100%;
+  height: 360px;
+  border: 0;
+  border-radius: var(--r-lg);
+}
+
+@media (min-width: 900px) {
+  .map__facade,
+  .map__frame {
+    height: 420px;
+  }
+}
+
+.map__facade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--c-teal-100);
+  text-align: center;
+}
+
+.map__pin {
+  color: var(--c-teal-700);
+}
