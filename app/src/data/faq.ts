@@ -1,4 +1,5 @@
-// 8 questions and answers transcribed verbatim from the source #collapse0 … #collapse7 blocks.
+// 8 questions and answers transcribed from the source #collapse0 … #collapse7 blocks,
+// with word-level copy fixes applied in this pass.
 
 export type FaqItem = { q: string; a: string }
 
@@ -21,7 +22,7 @@ export const faq: FaqItem[] = [
   },
   {
     q: 'Czy spać w protezach?',
-    a: 'Niektórzy twierdzą, że protezy można powinno się zdejmować na noc i przechowywać w zamkniętym pudełeczku (na sucho). My jednak mamy inne spostrzeżenia. Otóż w pierwszych dniach od otrzymania gotowych protez – owszem, warto zdejmować je na noc w celu przyzwyczajenia tkanek wewnątrzustnych jak i uniknięcia ewentualnych ran spowodowanych np. za długą protezą, którą trzeba rzecz jasna lekko przyciąć. Z reguły nasze protezy leżą jak ulał, niekiedy jednak potrzeba kilku wizyt korekcyjnych w celu odjęcia materiału w bolących miejscach. Po okresie przystosowawczym jednak, zalecamy spanie w protezach, gdyż tkanki nieuciskane zanikają, co powoduje obkurczanie wyrostków zębodołowych skutkujące powstawaniem przestrzeni między protezą a tkanką pacjenta i późniejszym gorszym utrzymaniem w jamie ustnej.',
+    a: 'Niektórzy twierdzą, że protezy powinno się zdejmować na noc i przechowywać w zamkniętym pudełeczku (na sucho). My jednak mamy inne spostrzeżenia. Otóż w pierwszych dniach od otrzymania gotowych protez – owszem, warto zdejmować je na noc w celu przyzwyczajenia tkanek wewnątrzustnych jak i uniknięcia ewentualnych ran spowodowanych np. za długą protezą, którą trzeba rzecz jasna lekko przyciąć. Z reguły nasze protezy leżą jak ulał, niekiedy jednak potrzeba kilku wizyt korekcyjnych w celu odjęcia materiału w bolących miejscach. Po okresie przystosowawczym jednak, zalecamy spanie w protezach, gdyż tkanki nieuciskane zanikają, co powoduje obkurczanie wyrostków zębodołowych skutkujące powstawaniem przestrzeni między protezą a tkanką pacjenta i późniejszym gorszym utrzymaniem w jamie ustnej.',
   },
   {
     q: 'Jak myć własne zęby?',
@@ -32,7 +33,7 @@ export const faq: FaqItem[] = [
     a: 'To zależy od każdego przypadku, jednak reguła to 5 lat. Co tyle z resztą NFZ refunduje wykonanie nowych protez zębowych powyżej 5 zębów. Czasami protezę trzeba wymienić prędzej, gdyż zbyt dużo straciliśmy zębów lub zbyt mocno zmieniły się warunki zewnątrzustne (nawet różnica wagi pacjenta wynosząca 5 kg potrafi spowodować niepasowanie protezy). Jeśli jednak zęby sztuczne nie uległy zbytniemu starciu, proteza dobrze się trzyma i odpowiednio dbamy o higienę protezy, można nawet (znamy takie przypadki) nosić jedną protezę przez 15 lat.',
   },
   {
-    q: 'Refundacja na NFZ, gdzie najlepiej? Jaki gabinet dentystyczny wybrać?',
-    a: 'W celu uzyskania informacji, prosimy o kontakt telefoniczny.',
+    q: 'Czy protezy są refundowane przez NFZ?',
+    a: 'Refundacja zależy od indywidualnego przypadku – reguła to 5 lat. W celu uzyskania szczegółowych informacji prosimy o kontakt telefoniczny.',
   },
 ]

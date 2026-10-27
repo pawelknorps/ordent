@@ -1,5 +1,6 @@
-import type { MouseEvent } from 'react'
+import type { CSSProperties, MouseEvent } from 'react'
 import type { Service } from '../data/services'
+import { asset } from '../lib/asset'
 
 // One native <dialog> per service, driven by Services.tsx's delegated click listener.
 export default function ServiceDialog({ service }: { service: Service }) {
@@ -12,8 +13,15 @@ export default function ServiceDialog({ service }: { service: Service }) {
   }
 
   return (
-    <dialog className="sheet" id={dialogId} aria-labelledby={titleId} onClick={handleBackdrop}>
+    <dialog className="sheet sheet--svc" id={dialogId} aria-labelledby={titleId} onClick={handleBackdrop}>
       <div className="sheet__head">
+        <span className="sheet__chip">
+          <span
+            className="icon sheet__chip-icon"
+            aria-hidden="true"
+            style={{ '--i': `url(${asset(`/img/icons/${service.icon}`)})` } as CSSProperties}
+          />
+        </span>
         <h3 id={titleId}>{service.title}</h3>
         <button
           type="button"
@@ -38,9 +46,13 @@ export default function ServiceDialog({ service }: { service: Service }) {
             ))}
           </dl>
         )}
-        {service.detail.notes?.map((n, i) => (
-          <p key={`n${i}`}>{n}</p>
-        ))}
+        {service.detail.notes && (
+          <div className="sheet__notes">
+            {service.detail.notes.map((n, i) => (
+              <p key={`n${i}`}>{n}</p>
+            ))}
+          </div>
+        )}
       </div>
     </dialog>
   )

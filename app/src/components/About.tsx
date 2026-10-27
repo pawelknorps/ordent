@@ -18,7 +18,7 @@ export default function About() {
           <h2 id="about-title" className="section__title reveal">
             {'Laboratorium protetyczne z wieloletnim doświadczeniem'}
           </h2>
-          <p className="reveal">{'Witamy na stronie naszego laboratorium. Cieszymy się, że z nami jesteś.'}</p>
+          <p className="reveal">{'Wykonujemy protezy zębowe, korony i mosty, szyny oraz naprawy protez.'}</p>
           <div className="nap reveal">
             <dl className="nap__list">
               <dt>{ui.phoneLabel}</dt>

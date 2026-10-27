@@ -106,8 +106,9 @@ Order = source order (old anchors preserved).
 | 4 | Dlaczego my | `#dlaczego-my` | „Dlaczego my?” |
 | 5 | Galeria | `#gallery` | „Galeria” |
 | 6 | FAQ | `#FAQ` | „Pytania i odpowiedzi” |
-| 7 | Kontakt | `#contact` | „Skontaktuj się” |
-| 8 | Footer | — | none |
+| 7 | Opinie | `#opinie` | „Opinie” |
+| 8 | Kontakt | `#contact` | „Skontaktuj się” |
+| 9 | Footer | — | none |
 
 - **Exactly one `<h1>`** — the hero.
 - `<h3>` used for: 8 service card titles, 8 FAQ questions (inside `<summary>`), the two bio names in „Dlaczego my?”.
@@ -129,8 +130,9 @@ Legend: M = ≤639, T = 640–899, D = ≥900.
 | **O pracowni** (`content-3-10`) | 1 col: `3.jpg` 4:3 cover → h2 → paragraph → **NAP card** (phone `tel:` buttons full-width, hours, pogotowie callout). | 1 col, image 16:9, paragraph capped `--w-prose` | 2 cols `1fr / 1.05fr` gap 64: text left, image right `aspect-ratio: 4/3; --r-lg`; NAP card sits under the paragraph, max-width 420px. |
 | **Usługi** | 1 col, gap 16 | 2 cols, gap 20 | 3 cols, gap 24 (8 items → last row 2, left-aligned) |
 | **Dlaczego my** | video 16:9 (`--r-md`) → USP strong → bio paragraphs | same | 2 cols `1.1fr / 1fr` gap 64, video left, text right |
-| **Galeria** | 2 cols, gap 8, square tiles | 3 cols, gap 10 | 4 cols, gap 12 |
+| **Galeria** | 2 cols, gap 8, 3:2 tiles | 3 cols, gap 10 | 4 cols, gap 12 |
 | **FAQ** | 1 col, centered `max-width: 800px` | same | same |
+| **Opinie** | 1 col: lede + jeden link do wizytówki Google. Bez cytatów, dopóki `data/reviews.ts` jest puste. | same | same, `max-width: 800px` |
 | **Kontakt** | stacked: `<address>` → 2 full-width `tel:` buttons → hours → map facade 360px | 2 cols `1fr / 1.2fr`, gap 40, map 360px | same, map 420px |
 | **Footer** | 1 col, centered, `--c-teal-700` bg, `--c-paper` text | same | 3 cols: wordmark / NAP / hours + credit |
 
@@ -146,30 +148,36 @@ Legend: M = ≤639, T = 640–899, D = ≥900.
 
 ### 4.2 Service card
 ```
-white surface · 1px var(--c-line) · radius var(--r-lg) · padding 24/28 · flex column
-  icon (32×32, see §7.2)
+white surface · 1px var(--c-line) · radius var(--r-lg) · padding clamp(20px, 4vw, 28px) · flex column, gap 12
+  chip 48×48 (radius --r-md, --c-teal-100 bg, --c-teal-700 icon at 26×26, see §7.2)
   <h3>
-  tagline (existing copy, --c-ink-muted)
-  price line (only when the source has one): "Cena: 200 – 600 zł", font-variant-numeric: tabular-nums
-  <button class="btn btn-ghost" aria-haspopup="dialog">Szczegóły</button>  ← margin-top: auto
+  tagline (existing copy, --fs-sm, --c-ink-muted, max-width 36ch)
+  footer hairline (1px --c-line, margin-top: auto), flex space-between:
+    price line (only when the source has one): "Cena: 200 – 600 zł", --c-teal-700, tabular-nums
+    link-style <button aria-haspopup="dialog" aria-controls="d-…">Szczegóły →</button>
 ```
-Hover: `border-color: color-mix(in srgb, var(--c-teal-600) 35%, transparent)`, shadow `--sh-2`, `translateY(-2px)`. Focus-visible: 2px ring. Cards stay equal height via `margin-top: auto` on the button.
+Every card gets the footer hairline, so the 3-of-8 price presence reads as deliberate. Hover/focus-within: `border-color: color-mix(in srgb, var(--c-teal-600) 35%, transparent)`, shadow `--sh-2`, `translateY(-3px)`, and the chip inverts to `--c-teal-700` bg + white icon. The trigger is a real `<button>`, restyled as a teal link (no `btn` classes) with a `→` that slides 4px on hover/focus; global 2px `:focus-visible` ring. Cards stay equal height via `margin-top: auto` on the footer. The delegated `[aria-haspopup="dialog"]` listener on `#services` is unchanged.
 
 ### 4.3 Service detail — **native `<dialog>`** (the one mechanism)
 Chosen over inline `<details>` because the detail copy is long-form (up to ~1 400 characters) and must be readable at `--w-prose`; `<dialog>.showModal()` gives ESC, focus trap, inert background and `::backdrop` **for free** with ~15 lines of JS, while an inline expander would reflow the whole 3-column row on every open. FAQ keeps `<details>` because its answers are short and meant to be scanned in place.
 
 ```
-<dialog class="sheet" id="d-akrylowe" aria-labelledby="d-akrylowe-t">
-  <h3 id="d-akrylowe-t">Protezy Akrylowe</h3>
-  <img src={portfolio01} alt="…" loading="lazy" />   ← §7 slot
+<dialog class="sheet sheet--svc" id="d-akrylowe" aria-labelledby="d-akrylowe-t">
+  <div class="sheet__head">
+    <span class="sheet__chip">…26px mask icon, teal on --c-teal-100…</span>
+    <h3 id="d-akrylowe-t">Protezy Akrylowe</h3>
+    <button class="sheet__close" aria-label="Zamknij">×</button>
+  </div>
   <div class="sheet__body">…verbatim modal copy…</div>
-  <button class="sheet__close" aria-label="Zamknij">×</button>
 </dialog>
 ```
+- The `sheet--svc` modifier scopes all new detail-dialog rules, so the gallery Lightbox (`sheet sheet--lightbox`) is untouched.
+- Head: chip + `flex: 1` h3 + close button, vertically centred. Body padding `--space-5`, widening to `24/32/32` at ≥640px. Below 480px the head stacks (chip + close on one row, full-width h3 under it) — at 320px the 3-up row starves the long „Naprawy…” title to ~160px and 5 sticky lines.
 - One delegated listener on `#services`: `[aria-haspopup="dialog"]` → `document.getElementById(id).showModal()`.
 - `::backdrop { background: rgba(16,32,31,.55) }`. Panel `max-width: 640px; max-height: 85dvh; overflow: auto; --r-lg; --sh-3`.
 - Close on ESC (native), on backdrop click (`e.target === dialog`), on the × button.
-- The price list inside „Naprawy” becomes a real `<dl>` (7 rows) instead of a `<br>`-separated blob.
+- The price list inside „Naprawy” becomes a real `<dl>` (6 rows) with top+bottom hairlines and `--space-5` vertical margins; `dt` at weight 500, `dd` teal + tabular-nums.
+- The two timing lines become a `.sheet__notes` block: dashed top hairline, `--fs-sm`, `--c-ink-muted`.
 
 ### 4.4 FAQ — native `<details>`
 ```
@@ -254,9 +262,19 @@ Static facade = `--c-teal-100` block, pin glyph, address, plus a plain `<a href=
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 ```
-`DOMAIN` unknown — leave a `TODO` constant in one file, used by `<link rel=canonical>`, OG URLs and JSON-LD `@id`.
+`DOMAIN` jest już ustalona: `https://pawelknorps.github.io/ordent/` — domena `ordent.pl` **nie jest podłączona**. Ten sam adres trafia do `canonical`, `og:url`, `og:image`, JSON-LD (`@id`, `url`, `image`), `Sitemap:` w `robots.txt` i `<loc>` w `sitemap.xml`. W `app/index.html` nad `<link rel="canonical">` stoi `<!-- TODO -->` przypominający o podmianie na `ordent.pl` po podłączeniu domeny.
 
-**JSON-LD** (single script, in `<head>` or end of `<body>`):
+**JSON-LD — dwa skrypty**, oba w `<head>`: `LocalBusiness` (poniżej) oraz `FAQPage`, którego `mainEntity` odwzorowuje 8 wpisów z `app/src/data/faq.ts`:
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "<q>", "acceptedAnswer": { "@type": "Answer", "text": "<a, czysty tekst>" } }
+  ]
+}
+```
+Treść FAQ istnieje więc **w dwóch kopiach** — `faq.ts` i `index.html`. `index.html` jest statyczny i nie może zaimportować `.ts`, więc po każdej edycji `faq.ts` trzeba ręcznie poprawić `FAQPage`. Nic w repo tego nie pilnuje.
 ```json
 {
   "@context": "https://schema.org",
@@ -298,7 +316,8 @@ Notes: geo is taken from the map embed's view centre, not a surveyed marker — 
 **Accessibility**
 - Landmarks: `<header>`, `<nav aria-label="Główna">`, `<main>`, `<footer>`. Sections use `aria-labelledby`.
 - Skip link „Przejdź do treści” as first focusable, visible on focus.
-- Global focus: `:focus-visible { outline: 2px solid var(--c-teal-600); outline-offset: 2px; border-radius: inherit }`. Never `outline: none` without a replacement.
+- **No-JS fallback:** `<noscript>` w `app/index.html` przed `#root` powtarza NAP (h1, adres, oba linki `tel:`, godziny) — bez JavaScriptu `#root` zostaje pusty, więc to jedyna treść, jaką zobaczy użytkownik.
+- Global focus: `:focus-visible { outline: 2px solid var(--c-focus); outline-offset: 2px; border-radius: inherit }`. `--c-focus` to domyślnie `--c-teal-600`, a `#fff` na ciemnych powierzchniach (`.site-footer`, `.hero`, `.whyus__video`) i na `.skip-link`. Never `outline: none` without a replacement.
 - Hover ≠ focus: every hover effect has a focus-visible twin.
 - Target size ≥ 44×44 for header trigger, buttons, tel links, gallery tiles (exceeds WCAG 2.5.8).
 - Keyboard: menu (Esc + return focus), dialogs (native), gallery z-order (Tab), details (native), map facade (Enter/click).
@@ -318,7 +337,7 @@ Notes: geo is taken from the map embed's view centre, not a surveyed marker — 
 ### 7.1 Gallery grid — 12 of 26 `images/gallery/*.jpg`
 `IMG_7005, 7006, 7008, 7009, 7012, 7141, 7142, 7148, 7766, 7768, 8211, 8212` (`-min.jpg`) in that order.
 Superseded/broken references in the old markup to drop or fix: `IMG_7766` was linked with an `IMG_7768` `<img>`, and four tiles pointed `href="images/portfolio/04.jpg"` while showing a gallery `<img>` — the rewrite removes both bugs.
-The other 14 files (`7739, 7742, 7747, 7749, 7751, 7765, 7770, 8192, 8194, 8196, 8204, 8207, 8216, 9876`) are an unused spare pool — swap one in if a tile looks weak. Note `IMG_7751` is portrait (4000×6000); the square crop handles it.
+The other 14 files (`7739, 7742, 7747, 7749, 7751, 7765, 7770, 8192, 8194, 8196, 8204, 8207, 8216, 9876`) are an unused spare pool — swap one in if a tile looks weak. Note `IMG_7751` is portrait (4000×6000); the 3:2 crop handles it.
 
 ### 7.2 Services ↔ icon ↔ portfolio photo
 | # | Service (copy verbatim) | Icon (`images/svg/`) | Dialog photo (`images/portfolio/`) |
@@ -391,12 +410,13 @@ Everything below is **new** writing. All other copy is lifted verbatim from `ind
 | 22 | „© 2026 ORDENT – pracownia protetyczna, Brodnica.” | footer (source had „© 2020 Copyright” + a „made by” credit dropped from the design) |
 | 23 | `<title>` + `meta description` + OG copy | §6 |
 | 24 | „Dariusz Orłowski – technik dentystyczny, 40+ lat praktyki” style `<h3>` for bio 1 | optional; the source has the name as `<strong>` only — if you want a real `<h3>`, this label is new |
+| 25 | „Opinie” (h2) + „Zachęcamy do zapoznania się z opiniami o naszej pracowni w Google.” + „Zobacz opinie w Google” | sekcja „Opinie" (`Opinie.tsx`). The review texts themselves are **not** invented — `data/reviews.ts` is empty until real Google reviews are pasted in. |
 
 Uncertain / flag to the owner:
 - **FAQ count:** the source has **8** questions, not 7. Spec keeps all 8. Confirm one isn't meant to be dropped.
 - **„Ikony: Freepik (flaticon.com)”** — the `images/svg/` set mirrors the Flaticon/Freepik naming scheme. If that licence requires attribution, the footer credit must stay (it was in the original). Legal, not design — verify.
 - **Domain, geo coordinates, „sob 10–13” formatting** — see §6.
-- Service-copy typos in the source („Siudo mówienia”, „dostawianie”, „porcelanowe” lists with mixed case, „ad. ” numbering) are kept verbatim per the no-rewrite rule. Say the word if you want a proofread pass — that would be additional invented content.
+- Service-copy typos: the copy pass corrected three word-level joins — „Tzw. Protezy” → „Tzw. protezy”, „teżdroższe” → „też droższe”, „Siudo mówienia” → „się do mówienia” — and nothing else. Still verbatim: „peloty” (pending client confirmation; carries a header comment in `services.ts`), „dostawianie”, the „Porcelanowe.”-style price-list items and „ad. ” numbering. Say the word if you want a fuller proofread pass — that would be additional invented content.
 
 ---
 
@@ -433,8 +453,17 @@ The spec text above is left as written; these are the decisions taken while buil
 - **`dialog` centring:** `* { margin: 0 }` in the reset beat the UA's `dialog:modal { margin: auto }`, so `.sheet` sets `margin: auto` explicitly.
 - **`img, video` reset** carries `height: auto` so markup `height="900"` cannot stretch `.about__img`.
 - **Skip-link focus target:** `<main id="content" tabIndex={-1}>` — Safari/Firefox do not relocate focus to a non-focusable fragment target. Safe because every focus style is `:focus-visible`-only.
-- **Domain:** `https://ordent.pl` is a placeholder, marked with a `<!-- TODO -->` in `app/index.html`; no `Sitemap:` line in `robots.txt` until it is confirmed.
+- **Domain:** `ordent.pl` is **not connected**. Canonical, `og:url`, `og:image`, JSON-LD `@id`/`url`/`image`, `robots.txt` `Sitemap:` and `sitemap.xml` `<loc>` all point at `https://pawelknorps.github.io/ordent/`, with a `<!-- TODO -->` in `app/index.html` above `<link rel="canonical">`. `base: '/ordent/'` stays until the domain is live.
 - **„Naprawy" price list is 6 rows**, not 7 — the source has 6.
 - **Header tooth mark restored:** the old `#header i` (a 32×32 `background: url(images/040-tooth.svg)`) is back, as `<span class="icon wordmark__tooth" aria-hidden>` inside the wordmark link, so it masks in `currentColor` and follows the transparent/scrolled header states. Validated: link accessible name stays „ORDENT", header tab order unchanged, no overlap at 320 px, stroke contrast on the hero 4.58:1.
-- **Copy pass:** punctuation and whitespace only (double periods/spaces, space before comma, `-` → `–`). Word-level typos left in place; see `README.md`.
+- **Copy pass:** punctuation and whitespace (double periods/spaces, space before comma, `-` → `–`), **plus three word-level joins**: „Tzw. Protezy” → „Tzw. protezy”, „teżdroższe” → „też droższe”, „Siudo mówienia” → „się do mówienia”. Everything else stays verbatim, including „peloty” pending client confirmation; see `README.md`.
 - **Lighthouse `color-contrast` is flaky (1 run in ~3):** the `.reveal` fade is 0.5 s of real opacity, so a capture taken mid-fade measures text at ~50 %. Verified all 43 `.reveal` elements reach `is-in` with computed `opacity: 1`; nothing stays faded. With the fade settled the audit is 1.00/1.00/1.00. Re-run before treating a sub-1.00 score as real.
+- **New section „Opinie" (§2 order):** added between `<Faq />` and `<Contact />`, `id="opinie"`. It is **link-only** — `app/src/data/reviews.ts` ships an empty array, so the rendered output is a one-line lede plus „Zobacz opinie w Google" pointing at the Google listing URL (`MAPS_LINK`). No invented authors, ratings, dates or aggregates; the data-driven list branch is dead code until real reviews are pasted in. Not added to the nav.
+- **Google Business Profile — verified, and linked.** The profile is „Pracownia Protetyki Stomatologicznej Dariusz Orłowski", `ludocid=5880031631405622190` (the same place as the map embed), rated **5,0 with 13 reviews**, which Google labels „Opinie nie są zweryfikowane". `MAPS_LINK` now points at `https://maps.google.com/?cid=5880031631405622190` instead of a name/address search query, and the same URL is in the LocalBusiness `sameAs`. The rating is deliberately **not** rendered (it would drift out of date for no gain). Two manual profile tasks: **no website is attached** in the profile (Google shows „Dodaj witrynę"), and the profile postal code is `87-300` where the site says `87-301`.
+- **§9 „no analytics" — re-decided, still not built.** Revisited during this pass and deliberately left out; no analytics script, no counter, no consent banner. Read §9 as current.
+- **Deleted in this pass (contradicts §1.2/§1.3/§4):** tokens `--fs-xs`, `--fs-eyebrow`, `--w-wide`, `--sh-1`, `--space-9`, `--space-10` and the `.eyebrow` rule had no consumer. Added `--c-focus` (default `var(--c-teal-600)`), overridden to `#fff` on `.site-footer`, `.hero` and `.whyus__video` where the surface is dark.
+- **FAQPage JSON-LD duplicates `faq.ts`.** The 8 Q/A pairs are transcribed verbatim into a second `<script type="application/ld+json">` in `app/index.html`. Static `index.html` cannot import the TSX data, so the two copies must be edited together — nothing in the repo checks that they agree.
+- **§4.5 caption + `aria-label` — dropped.** The tile is no longer `<button aria-label="<caption>">`; the caption is visible text in `<span class="tile__caption">` and the tile image is `alt=""` (the text next to it already names the work). `.tile` is a grid so the caption can sit under the image, and the aspect ratio moved to `.tile img`. Tiles are therefore taller than 3:2.
+- **§4.6 CTA hierarchy — second `tel:` demoted.** Both numbers shipped before as equal-weight full-width buttons; the first is now `btn--primary btn--block` and the second `btn--ghost btn--block`, so the primary phone is visually the lead action. Address and hours come from `site.ts`, but the address is still hard-coded in `Contact.tsx` (it is not exported from `site.ts`).
+- **§4.7 autoplay — dropped entirely.** The mount-time `play()` was removed rather than made conditional, so the video never autoplays regardless of `prefers-reduced-motion`; the poster plus the 44×44 play/pause overlay is the only way to start it. §5's „video does not autoplay" line remains true.
+- **Gallery captions are now visible text**, so §6's alt strategy „gallery + portfolio tiles → descriptive Polish, one per work type" no longer applies to gallery tiles (see the §4.5 bullet above).

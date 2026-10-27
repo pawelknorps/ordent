@@ -43,14 +43,16 @@ export default function Lightbox({ index, onIndex, onClose }: Props) {
       onClose={onClose}
       onClick={handleBackdrop}
     >
-      <img
-        className="lightbox__img"
-        src={asset(`/img/gallery/${item.id}-1440.jpg`)}
-        srcSet={asset(`/img/gallery/${item.id}-1440.webp`)}
-        width={1440}
-        height={960}
-        alt={item.caption}
-      />
+      <picture>
+        <source type="image/webp" srcSet={asset(`/img/gallery/${item.id}-1440.webp`)} />
+        <img
+          className="lightbox__img"
+          src={asset(`/img/gallery/${item.id}-1440.jpg`)}
+          width={1440}
+          height={960}
+          alt={item.caption}
+        />
+      </picture>
       <p className="lightbox__caption" id="lightbox-caption">
         {item.caption}
       </p>

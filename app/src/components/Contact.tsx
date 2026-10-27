@@ -1,3 +1,4 @@
+import { hours, phones, ui } from '../data/site'
 import MapEmbed from './MapEmbed'
 
 export default function Contact() {
@@ -22,21 +23,23 @@ export default function Contact() {
             </address>
 
             <p className="contact__phones">
-              <a className="btn btn--primary btn--block" href="tel:+48603053437">
-                603 053 437
-              </a>
-              <a className="btn btn--primary btn--block" href="tel:+48601594229">
-                601 594 229
-              </a>
+              {phones.map((phone, i) => (
+                <a
+                  key={phone.href}
+                  className={i === 0 ? 'btn btn--primary btn--block' : 'btn btn--ghost btn--block'}
+                  href={phone.href}
+                >
+                  {phone.display}
+                </a>
+              ))}
             </p>
 
             <p className="contact__hours">
-              <span className="contact__label">Godziny otwarcia:</span> Pon–pt 10–17 · sob 10–13
+              <span className="contact__label">{ui.hoursLabel}</span> {hours}
             </p>
 
             <p className="callout">
-              <strong>POGOTOWIE PROTETYCZNE</strong> – w nagłych wypadkach możliwe przyjęcie poza
-              godzinami pracy.
+              <strong>{ui.emergencyLabel}</strong> – {ui.emergency}
             </p>
           </div>
 

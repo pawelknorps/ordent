@@ -23,6 +23,8 @@ export default function Header() {
   useEffect(() => {
     if (!open) return
     document.documentElement.style.overflow = 'hidden'
+    const behind = [document.querySelector('main'), document.querySelector('footer')]
+    behind.forEach((el) => el?.setAttribute('inert', ''))
     panel.current?.querySelector<HTMLAnchorElement>('a')?.focus()
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close()
@@ -30,6 +32,7 @@ export default function Header() {
     document.addEventListener('keydown', onKey)
     return () => {
       document.documentElement.style.overflow = ''
+      behind.forEach((el) => el?.removeAttribute('inert'))
       document.removeEventListener('keydown', onKey)
     }
   }, [open])

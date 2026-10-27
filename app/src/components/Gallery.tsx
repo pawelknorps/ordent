@@ -25,7 +25,6 @@ export default function Gallery() {
               <button
                 type="button"
                 className="tile"
-                aria-label={item.caption}
                 aria-haspopup="dialog"
                 onClick={() => setOpenIndex(i)}
               >
@@ -41,10 +40,11 @@ export default function Gallery() {
                     sizes={SIZES}
                     width={960}
                     height={640}
-                    alt={item.caption}
+                    alt=""
                     loading={i < 4 ? 'eager' : 'lazy'}
                   />
                 </picture>
+                <span className="tile__caption">{item.caption}</span>
               </button>
             </li>
           ))}

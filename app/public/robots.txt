@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ordent.pl/sitemap.xml
+Sitemap: https://pawelknorps.github.io/ordent/sitemap.xml

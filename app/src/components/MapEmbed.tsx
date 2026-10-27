@@ -4,8 +4,8 @@ import { useState } from 'react'
 const MAP_SRC =
   'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9544.339697570467!2d19.394949!3d53.270098!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x519a119d71fe23ae!2sPracownia%20Protetyki%20Stomatologicznej%20Dariusz%20Or%C5%82owski!5e0!3m2!1spl!2spl!4v1587213900104!5m2!1spl!2spl'
 
-const MAPS_LINK =
-  'https://maps.google.com/?q=Pracownia%20Protetyki%20Stomatologicznej%20Dariusz%20Or%C5%82owski%2C%20ul.%20Karola%20Szymanowskiego%2033%2C%2087-301%20Brodnica'
+// Verified Google Business Profile of the same place as the embed (ludocid), 5,0 · 13 opinii.
+export const MAPS_LINK = 'https://maps.google.com/?cid=5880031631405622190'
 
 // Click-to-load facade: the Google iframe (and its cookies) only appears on demand.
 export default function MapEmbed() {

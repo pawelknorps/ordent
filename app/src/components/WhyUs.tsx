@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { usp, ui } from '../data/site'
 import { asset } from '../lib/asset'
@@ -8,12 +8,6 @@ const mask = (file: string) => ({ '--i': `url(${asset(`/img/icons/${file}`)})` }
 export default function WhyUs() {
   const video = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
-
-  // WCAG 2.2.2: never autoplay when the visitor asks for reduced motion.
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    video.current?.play().catch(() => {})
-  }, [])
 
   function toggle() {
     const el = video.current

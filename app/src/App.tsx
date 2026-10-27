@@ -5,6 +5,7 @@ import Services from './components/Services'
 import WhyUs from './components/WhyUs'
 import Gallery from './components/Gallery'
 import Faq from './components/Faq'
+import Opinie from './components/Opinie'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import './styles/tokens.css'
@@ -23,6 +24,7 @@ export default function App() {
         <WhyUs />
         <Gallery />
         <Faq />
+        <Opinie />
         <Contact />
       </main>
       <Footer />

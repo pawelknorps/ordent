@@ -2,7 +2,6 @@
 .container { width: 100%; max-width: var(--w-content); margin-inline: auto; padding-inline: 20px }
 .section { padding-block: clamp(56px, 9vw, 112px) }
 .section__head { display: grid; gap: var(--space-3); max-width: 62ch; margin: 0 auto var(--space-7); text-align: center }
-.eyebrow { font-size: var(--fs-eyebrow); letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--c-gold-700) }
 .section__title { font-size: var(--fs-h2); line-height: 1.15; letter-spacing: -.015em }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0 }
@@ -34,7 +33,7 @@
 
 /* ============ skip link ============ */
 .skip-link { position: absolute; top: 8px; left: 16px; z-index: 60; padding: 10px 16px; border-radius: var(--r-sm); background: var(--c-teal-700); color: #fff; font-weight: 500; text-decoration: none; transform: translateY(-200%) }
-.skip-link:focus-visible { transform: none }
+.skip-link:focus-visible { transform: none; outline-color: #fff }
 
 /* ============ header ============ */
 /* 1px absolute sentinel at the document top: the IntersectionObserver flips the
@@ -68,7 +67,7 @@
 }
 
 /* ============ hero ============ */
-.hero { position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 72vh; margin-top: calc(-1 * var(--header-h)); color: #fff; background: url('/img/hero.jpg') 50% 40% / cover no-repeat }
+.hero { --c-focus: #fff; position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 72vh; margin-top: calc(-1 * var(--header-h)); color: #fff; background: url('/img/hero.jpg') 50% 30% / cover no-repeat }
 /* the .45 mid stop is what holds the white <h1> at >=3:1 over the photo's bright blurred equipment */
 .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--c-scrim) 0%, rgba(6, 20, 20, .45) 55%, rgba(6, 20, 20, .10)) }
 /* top scrim only: the transparent unscrolled header (white wordmark + toggle) needs 3:1 on the bright ceiling */
@@ -107,7 +106,7 @@
 
 /* ============ dlaczego my ============ */
 .whyus__grid { display: grid; gap: var(--space-7) }
-.whyus__video { position: relative; overflow: hidden; border-radius: var(--r-md); background: var(--c-scrim) }
+.whyus__video { --c-focus: #fff; position: relative; overflow: hidden; border-radius: var(--r-md); background: var(--c-scrim) }
 .whyus__video video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover }
 .video__toggle { position: absolute; bottom: var(--space-3); left: var(--space-3); display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--space-4); border: 1px solid rgba(255, 255, 255, .5); border-radius: var(--r-pill); background: rgba(6, 20, 20, .7); color: #fff; font: inherit; font-weight: 500; cursor: pointer }
 .video__toggle:hover, .video__toggle:focus-visible { background: rgba(6, 20, 20, .9) }
@@ -118,7 +117,7 @@
 @media (min-width: 900px) { .whyus__grid { grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center } }
 
 /* ============ footer ============ */
-.site-footer { padding-block: var(--space-8) var(--space-6); background: var(--c-teal-700); color: var(--c-paper) }
+.site-footer { --c-focus: #fff; padding-block: var(--space-8) var(--space-6); background: var(--c-teal-700); color: var(--c-paper) }
 .site-footer__grid { display: grid; gap: var(--space-6); text-align: center }
 .site-footer a { color: var(--c-paper) }
 .site-footer address { display: grid; gap: var(--space-1); justify-items: center; font-style: normal }

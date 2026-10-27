@@ -4,7 +4,7 @@ import { asset } from '../lib/asset'
 import ServiceDialog from './ServiceDialog'
 
 const LEAD =
-  'Protezy – to ruchome uzupełnienia protetyczne, odtwarzające brakujące tkanki jamy ustnej pacjenta. Proteza może zastąpić jednego zęba, jak również całe uzębienie. W przeciwieństwie do protez stałych, gdzie odbudowa zęba polega na zacementowaniu na stałe pracy protetycznej, protezy ruchome są wyciągane z jamy ustnej przez samego pacjenta. Pełnią funkcję estetyczną oraz funkcjonalną, dając piękny uśmiech i umożliwiając gryzienie i przeżuwanie pokarmów.'
+  'Protezy to ruchome uzupełnienia protetyczne, które odtwarzają brakujące tkanki jamy ustnej — od jednego zęba po całe uzębienie. Inaczej niż prace stałe, osadzane trwale, protezę ruchomą pacjent sam wyjmuje i zakłada. Wracają estetyka uśmiechu oraz komfort gryzienia i mówienia.'
 
 export default function Services() {
   // One delegated listener for all 8 dialogs; the trigger points at its dialog via aria-controls.
@@ -28,22 +28,29 @@ export default function Services() {
         <div className="services__grid">
           {services.map((s) => (
             <article className="svc-card reveal" key={s.id}>
-              <span
-                className="icon svc-card__icon"
-                aria-hidden="true"
-                style={{ '--i': `url(${asset(`/img/icons/${s.icon}`)})` } as CSSProperties}
-              />
+              <span className="svc-card__chip">
+                <span
+                  className="icon svc-card__icon"
+                  aria-hidden="true"
+                  style={{ '--i': `url(${asset(`/img/icons/${s.icon}`)})` } as CSSProperties}
+                />
+              </span>
               <h3 className="svc-card__title">{s.title}</h3>
               <p className="svc-card__tagline">{s.tagline}</p>
-              {s.price && <p className="svc-card__price">{s.price}</p>}
-              <button
-                type="button"
-                className="btn btn--ghost svc-card__more"
-                aria-haspopup="dialog"
-                aria-controls={`d-${s.id}`}
-              >
-                Szczegóły
-              </button>
+              <div className="svc-card__foot">
+                {s.price && <p className="svc-card__price">{s.price}</p>}
+                <button
+                  type="button"
+                  className="svc-card__more"
+                  aria-haspopup="dialog"
+                  aria-controls={`d-${s.id}`}
+                >
+                  Szczegóły
+                  <span className="svc-card__arrow" aria-hidden="true">
+                    →
+                  </span>
+                </button>
+              </div>
             </article>
           ))}
         </div>
