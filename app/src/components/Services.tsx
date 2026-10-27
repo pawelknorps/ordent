@@ -8,7 +8,7 @@ const LEAD =
   'Protezy to ruchome uzupełnienia protetyczne, które odtwarzają brakujące tkanki jamy ustnej — od jednego zęba po całe uzębienie. Inaczej niż prace stałe, osadzane trwale, protezę ruchomą pacjent sam wyjmuje i zakłada. Wracają estetyka uśmiechu oraz komfort gryzienia i mówienia.'
 
 export default function Services() {
-  // One delegated listener for all 8 dialogs; the trigger points at its dialog via aria-controls.
+  // One delegated listener for every service dialog; the trigger points at its dialog via aria-controls.
   function handleClick(e: MouseEvent<HTMLElement>) {
     const trigger = (e.target as HTMLElement).closest<HTMLElement>('[aria-haspopup="dialog"]')
     if (!trigger) return

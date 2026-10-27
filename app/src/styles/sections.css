@@ -505,6 +505,10 @@ dialog.sheet--lightbox {
 }
 
 /* ---------------- Map facade ---------------- */
+.map {
+  position: relative;
+}
+
 .map__facade,
 .map__frame {
   width: 100%;
@@ -527,8 +531,33 @@ dialog.sheet--lightbox {
   justify-content: center;
   gap: var(--space-2);
   padding: var(--space-5);
-  background: var(--c-teal-100);
+  /* Locally hosted OSM render (no third-party request → no cookie banner). The image is centred
+     on the address, so `cover`'s symmetric crop keeps the pin on it at every breakpoint. */
+  background: var(--c-teal-100) url('/img/map.jpg') center / cover no-repeat;
   text-align: center;
+}
+
+/* Keeps the copy legible over the map without washing it out. */
+.map__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, .88);
+}
+
+.map__credit {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  margin: 0;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: rgba(255, 255, 255, .85);
+  color: var(--c-ink-muted);
+  font-size: .6875rem;
 }
 
 .map__pin {

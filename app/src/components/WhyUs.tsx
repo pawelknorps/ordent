@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { usp, ui } from '../data/site'
 import { asset } from '../lib/asset'
@@ -8,12 +8,35 @@ const mask = (file: string) => ({ '--i': `url(${asset(`/img/icons/${file}`)})` }
 export default function WhyUs() {
   const video = useRef<HTMLVideoElement>(null)
   const [playing, setPlaying] = useState(false)
+  const userPaused = useRef(false)
+
+  // Autoplay once the clip is half in view — only when motion is allowed and the connection is
+  // not metered (DESIGN-SPEC §4.7). The toggle below stays the WCAG 2.2.2 pause control.
+  useEffect(() => {
+    const el = video.current
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection
+    if (conn?.saveData || /2g/.test(conn?.effectiveType ?? '')) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !userPaused.current) el.play().catch(() => {})
+      },
+      { threshold: 0.5 },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   function toggle() {
     const el = video.current
     if (!el) return
-    if (el.paused) el.play().catch(() => {})
-    else el.pause()
+    if (el.paused) {
+      userPaused.current = false
+      el.play().catch(() => {})
+    } else {
+      userPaused.current = true
+      el.pause()
+    }
   }
 
   return (

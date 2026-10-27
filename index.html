@@ -790,7 +790,33 @@
 <div class="container-fluid">
   <div id="map-row" class="row">
     <div class="col-xl-12">    
-    	<iframe width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9544.339697570467!2d19.394949!3d53.270098!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x519a119d71fe23ae!2sPracownia%20Protetyki%20Stomatologicznej%20Dariusz%20Or%C5%82owski!5e0!3m2!1spl!2spl!4v1587213900104!5m2!1spl!2spl"></iframe> 
+    	<style>
+  /* Map facade, mirroring app/src/components/MapEmbed.tsx: no third-party request (and so no
+     cookies) until the visitor asks for the live Google map. */
+  #map-facade { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; height: 400px; text-align: center; background: #d6efe9 url('images/map.jpg') center / cover no-repeat; }
+  #map-facade__panel { padding: 16px 24px; border-radius: 18px; background: rgba(255, 255, 255, .88); }
+  #map-facade__panel p { margin: 0 0 8px; }
+  #map-facade__btn { padding: 10px 18px; border: 0; border-radius: 999px; background: #0f766e; color: #fff; font: inherit; cursor: pointer; }
+  #map-facade__credit { position: absolute; right: 8px; bottom: 8px; margin: 0; padding: 1px 6px; border-radius: 6px; background: rgba(255, 255, 255, .85); font-size: 11px; color: #555; }
+</style>
+<div id="map-facade">
+  <div id="map-facade__panel">
+    <p>ul. Karola Szymanowskiego 33<br>87-300 Brodnica</p>
+    <a href="https://maps.google.com/?cid=5880031631405622190" target="_blank" rel="noopener">Otwórz w Google Maps</a>
+  </div>
+  <button type="button" id="map-facade__btn">Pokaż mapę</button>
+  <p id="map-facade__credit">&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors</p>
+</div>
+<!-- data-src, not src: a display:none iframe still loads, which would fire the Google request. -->
+<iframe id="map-frame" hidden width="100%" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" data-src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9544.339697570467!2d19.394949!3d53.270098!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x519a119d71fe23ae!2sPracownia%20Protetyki%20Stomatologicznej%20Dariusz%20Or%C5%82owski!5e0!3m2!1spl!2spl!4v1587213900104!5m2!1spl!2spl"></iframe>
+<script>
+  document.getElementById('map-facade__btn').addEventListener('click', function () {
+    document.getElementById('map-facade').hidden = true;
+    var frame = document.getElementById('map-frame');
+    frame.src = frame.dataset.src;
+    frame.hidden = false;
+  });
+</script> 
       
          
     </div>
