@@ -12,13 +12,7 @@ export default function Opinie() {
           <p>Zachęcamy do zapoznania się z opiniami o naszej pracowni w Google.</p>
         </div>
 
-        {reviews.length === 0 ? (
-          <p className="reveal">
-            <a className="btn btn--ghost" href={mapsLink} target="_blank" rel="noopener noreferrer">
-              Zobacz opinie w Google
-            </a>
-          </p>
-        ) : (
+        {reviews.length > 0 && (
           <ul className="opinie__list">
             {reviews.map((r) => (
               <li className="opinie__item reveal" key={`${r.author}-${r.date}`}>
@@ -35,6 +29,13 @@ export default function Opinie() {
             ))}
           </ul>
         )}
+
+        {/* Google pokazuje anonimowo tylko część opinii — link zostaje także przy wypełnionej liście. */}
+        <p className="opinie__more reveal">
+          <a className="btn btn--ghost" href={mapsLink} target="_blank" rel="noopener noreferrer">
+            Zobacz opinie w Google
+          </a>
+        </p>
       </div>
     </section>
   )

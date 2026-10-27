@@ -46,7 +46,7 @@ plik `CNAME` (lub wpisz domenę w ustawieniach Pages) i zmień `SITE_URL` na
 | `app/src/data/services.ts` | 7 usług + treść okien „Szczegóły" + cennik |
 | `app/src/data/faq.ts` | 8 pytań FAQ |
 | `app/src/data/gallery.ts` | 12 zdjęć galerii + podpisy |
-| `app/src/data/reviews.ts` | opinie z Google (na razie pusta lista — tylko link) |
+| `app/src/data/reviews.ts` | opinie z Google (5 z 13 — resztę Google pokazuje tylko po zalogowaniu) |
 | `app/src/components/` | sekcje strony |
 | `app/index.html` | `<head>` (meta, OG); adres wstawia build z `SITE_URL` |
 | `app/seo-plugin.ts` | generator JSON-LD, `<noscript>`, `robots.txt`, `sitemap.xml` |
@@ -83,12 +83,12 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
   w `robots.txt`, `<loc>` w `sitemap.xml`) wskazują na
   `https://pawelknorps.github.io/ordent/`. Trzyma je jedna stała `SITE_URL`
   w `app/src/data/site.ts` — po podłączeniu domeny zmień tylko ją.
-- **Opinie z Google** — sekcja „Opinie" to na razie tylko link do wizytówki.
-  Profil ma **5,0 · 13 opinii** (Google oznacza je jako „niezweryfikowane").
-  `app/src/data/reviews.ts` ma celowo pustą tablicę; po wklejeniu prawdziwych
-  opinii (autor, ocena 1–5, treść, data) sekcja sama się rozwinie w listę.
-  Nie wpisujemy opinii wymyślonych. Oceny nie pokazujemy na stronie, żeby nie
-  musieć jej odświeżać — sam link wystarcza.
+- **Opinie z Google** — profil ma **5,0 · 13 opinii** (Google oznacza je jako
+  „niezweryfikowane"). `app/src/data/reviews.ts` zawiera **5 prawdziwych opinii**
+  przepisanych dosłownie z wizytówki — tyle Google pokazuje bez logowania;
+  pozostałe 8 jest za ścianą logowania. Sekcja renderuje listę i zawsze link do
+  wizytówki. Nie wpisujemy opinii wymyślonych. Oceny zbiorczej (5,0 / 13) nie
+  pokazujemy na stronie, żeby nie musieć jej odświeżać.
 - **Wizytówka Google** — zweryfikowany adres to
   https://maps.google.com/?cid=5880031631405622190 (ten sam `ludocid`, co
   w mapie). Leży w `mapsLink` (`app/src/data/site.ts`) i w `sameAs` danych

@@ -624,6 +624,11 @@ dialog.sheet--lightbox {
   letter-spacing: .05em;
 }
 
+.opinie__more {
+  margin-top: var(--space-6);
+  text-align: center;
+}
+
 /* The flagship service (protezy elastyczne) — the site's single differentiator. */
 .svc-card--flag {
   position: relative;
