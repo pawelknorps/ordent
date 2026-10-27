@@ -13,16 +13,15 @@ export const nav = [
 ]
 
 export const phones = [
-  { display: '603 053 437', href: 'tel:+48603053437' },
   { display: '601 594 229', href: 'tel:+48601594229' },
+  { display: '603 053 437', href: 'tel:+48603053437' },
 ]
 
-export const hours = 'Pon–pt 10–17 · sob 10–13'
+export const hours = 'Pon–pt 10–17'
 
 /** Structured mirror of `hours` for the generated JSON-LD (the two must agree). */
 export const openingHours = [
   { day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '10:00', closes: '17:00' },
-  { day: ['Saturday'], opens: '10:00', closes: '13:00' },
 ]
 
 /** Single source of the postal address for the components, the map facade and JSON-LD. */

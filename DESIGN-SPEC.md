@@ -16,8 +16,8 @@ Source of truth for copy: `index.html`. Nothing is rewritten unless listed in §
 | Services | **8** cards (`#services`) |
 | Prices on card | 3 of 8: akrylowe 200–600 zł, szkieletowe 700–1400 zł, elastyczne 600–1200 zł. Naprawy carries a full price list inside its detail. |
 | FAQ | **8** items (`#collapse0` … `#collapse7`), not 7 — see §8 note |
-| NAP | ORDENT; ul. Karola Szymanowskiego 33, 87-300 Brodnica; 603 053 437 / 601 594 229 |
-| Hours | Pon–pt 10–17, sob 10–13; „POGOTOWIE PROTETYCZNE” poza godzinami |
+| NAP | ORDENT; ul. Karola Szymanowskiego 33, 87-300 Brodnica; 601 594 229 / 603 053 437 |
+| Hours | Pon–pt 10–17; sobota usunięta na życzenie klienta (patrz §11); „POGOTOWIE PROTETYCZNE” poza godzinami |
 | People | Dariusz i Marek Orłowscy |
 | USP | „Jako jedyni w mieście robimy protezy elastyczne” |
 | Lorem ipsum | 2 places: gallery intro, contact intro — must be replaced (§8) |
@@ -200,9 +200,9 @@ Chosen over inline `<details>` because the detail copy is long-form (up to ~1 40
 ### 4.6 Contact block
 - `<address>` with the NAP verbatim, `<strong>ORDENT</strong>`.
 - Two real links, never `href="#"`:
-  - `<a href="tel:+48603053437">603 053 437</a>`
   - `<a href="tel:+48601594229">601 594 229</a>`
-- Hours: `Pon–pt 10–17 · sob 10–13` next to a `<time>`-free label; the „POGOTOWIE PROTETYCZNE” sentence in a `--c-teal-100` callout with a `--c-gold-500` left rule and `--c-gold-700` label.
+  - `<a href="tel:+48603053437">603 053 437</a>`
+- Hours: `Pon–pt 10–17` next to a `<time>`-free label; the „POGOTOWIE PROTETYCZNE” sentence in a `--c-teal-100` callout with a `--c-gold-500` left rule and `--c-gold-700` label.
 - Uses en dashes, not the source's mixed `-`/`–`.
 
 ### 4.7 Video
@@ -284,7 +284,7 @@ Treść FAQ istnieje więc **w dwóch kopiach** — `faq.ts` i `index.html`. `in
   "description": "Pracownia protetyczna w Brodnicy. Protezy elastyczne, akrylowe i szkieletowe, korony i mosty, szyny, naprawy protez. Jako jedyni w mieście robimy protezy elastyczne.",
   "url": "https://DOMAIN/",
   "image": "https://DOMAIN/og.jpg",
-  "telephone": ["+48603053437", "+48601594229"],
+  "telephone": ["+48601594229", "+48603053437"],
   "priceRange": "20–1400 PLN",
   "address": {
     "@type": "PostalAddress",
@@ -296,8 +296,7 @@ Treść FAQ istnieje więc **w dwóch kopiach** — `faq.ts` i `index.html`. `in
   },
   "geo": { "@type": "GeoCoordinates", "latitude": 53.270098, "longitude": 19.394949 },
   "openingHoursSpecification": [
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "17:00" },
-    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "13:00" }
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "10:00", "closes": "17:00" }
   ],
   "founder": [
     { "@type": "Person", "name": "Dariusz Orłowski" },
@@ -415,7 +414,7 @@ Everything below is **new** writing. All other copy is lifted verbatim from `ind
 Uncertain / flag to the owner:
 - **FAQ count:** the source has **8** questions, not 7. Spec keeps all 8. Confirm one isn't meant to be dropped.
 - **„Ikony: Freepik (flaticon.com)”** — the `images/svg/` set mirrors the Flaticon/Freepik naming scheme. If that licence requires attribution, the footer credit must stay (it was in the original). Legal, not design — verify.
-- **Domain, geo coordinates, „sob 10–13” formatting** — see §6.
+- **Domain, geo coordinates** — see §6.
 - Service-copy typos: the copy pass corrected three word-level joins — „Tzw. Protezy” → „Tzw. protezy”, „teżdroższe” → „też droższe”, „Siudo mówienia” → „się do mówienia” — and nothing else. Still verbatim: „peloty” (pending client confirmation; carries a header comment in `services.ts`), „dostawianie”, the „Porcelanowe.”-style price-list items and „ad. ” numbering. Say the word if you want a fuller proofread pass — that would be additional invented content.
 
 ---
@@ -465,8 +464,10 @@ The spec text above is left as written; these are the decisions taken while buil
 - **FAQPage JSON-LD duplicates `faq.ts`.** *(Superseded — see the `seo-plugin.ts` entry below.)*
 - **§4.5 caption + `aria-label` — dropped.** The tile is no longer `<button aria-label="<caption>">`; the caption is visible text in `<span class="tile__caption">` and the tile image is `alt=""` (the text next to it already names the work). `.tile` is a grid so the caption can sit under the image, and the aspect ratio moved to `.tile img`. Tiles are therefore taller than 3:2.
 - **§4.6 CTA hierarchy — second `tel:` demoted.** Both numbers shipped before as equal-weight full-width buttons; the first is now `btn--primary btn--block` and the second `btn--ghost btn--block`, so the primary phone is visually the lead action. Address and hours come from `site.ts`, but the address is still hard-coded in `Contact.tsx` (it is not exported from `site.ts`).
-- **§4.7 autoplay — dropped entirely.** The mount-time `play()` was removed rather than made conditional, so the video never autoplays regardless of `prefers-reduced-motion`; the poster plus the 44×44 play/pause overlay is the only way to start it. §5's „video does not autoplay" line remains true.
+- **§4.7 autoplay — dropped entirely.** *(Superseded — see the „gated autoplay" entry below.)*
 - **Gallery captions are now visible text**, so §6's alt strategy „gallery + portfolio tiles → descriptive Polish, one per work type" no longer applies to gallery tiles (see the §4.5 bullet above).
 - **SEO blocks are generated, not duplicated (`app/seo-plugin.ts`).** The JSON-LD (`LocalBusiness`, `FAQPage`), the `<noscript>` fallback, `robots.txt` and `sitemap.xml` are all emitted at build time from `src/data/{site,faq,services}.ts`, so the duplicate-FAQ hazard noted above is gone. `SITE_URL` is the single source for every absolute address; `__SITE_URL__` placeholders in `index.html` are filled by the plugin. SEO-only copy (JSON-LD `description`, `founder`, `priceRange`) lives in the plugin on purpose — the config bundle never reaches the browser. `makesOffer` parses the `services.ts` price strings with `/^Cena: (\d+) – (\d+) zł$/` and **fails the build** on an unrecognised format instead of silently dropping the offer.
 - **Home-screen / PWA icons and manifest.** `index.html` carries `apple-touch-icon` and `site.webmanifest`; the PNGs (`apple-touch-icon.png` 180, `icon-192.png`, `icon-512.png`) are generated by `build_app_icons()` in `tools/build-assets.py` — the favicon's mark on a full-bleed `#0B4F4A` square, drawn at 4× and downscaled. Full bleed with no alpha, because iOS/Android apply their own mask. `site.webmanifest` is a hand-written file in `public/` with relative paths (`start_url: "."`).
 - **Flagship service highlighted.** `services.ts` gained `flag?: boolean` (set on `elastyczne`), `Services.tsx` renders a `ui.flagBadge` label („Nasza specjalność"), and `sections.css` adds `.svc-card--flag` / `.svc-card__flag` — a gold badge, `#fff` on `--c-gold-700` (6,27:1). One card only, per the owner's differentiator.
+- **§4.7 autoplay — gated autoplay shipped.** *(Supersedes the „dropped entirely" entry above.)* `WhyUs.tsx` autoplays once the clip is half in view, but only when `prefers-reduced-motion: reduce` is absent **and** the connection is not metered (`saveData` / 2g), and a manual pause sticks (`userPaused` ref). The poster + 44×44 toggle remains the WCAG 2.2.2 pause control, so §4.7/§5's intent holds. The legacy root `index.html` still autoplays its `images/elastyczna2.mp4` at rest (it is not deployed; left as in the original source).
+- **Phone order + Saturday hours — client request.** Numbers reordered to **601 594 229 first, 603 053 437 second** in `site.ts`, which drives header „Zadzwoń", About, Contact, footer and JSON-LD; `Header.tsx` now takes its `tel:` from `phones[0].href` instead of a hard-coded string. Saturday dropped from `hours` (`Pon–pt 10–17`) and from `openingHours`/`openingHoursSpecification`; §6 and the legacy `index.html` mirror follow. Note the Saturday came from the original site („Pon-pt: 10 - 17, sob 10 – 13"); the old contact block there never showed hours.

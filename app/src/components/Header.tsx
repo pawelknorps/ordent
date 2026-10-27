@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
-import { nav, ui } from '../data/site'
+import { nav, phones, ui } from '../data/site'
 import { asset } from '../lib/asset'
 
 const mask = (file: string) => ({ '--i': `url(${asset(`/img/icons/${file}`)})` }) as CSSProperties
@@ -71,7 +71,7 @@ export default function Header() {
                 </li>
               ))}
             </ul>
-            <a className="btn btn--primary" href="tel:+48603053437" onClick={close}>
+            <a className="btn btn--primary" href={phones[0].href} onClick={close}>
               <span className="icon" style={mask('007-appointment.svg')} aria-hidden="true" />
               {ui.call}
             </a>
