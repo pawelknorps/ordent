@@ -13,8 +13,8 @@ Source of truth for copy: `index.html`. Nothing is rewritten unless listed in §
 
 | Item | Reality in `index.html` |
 |---|---|
-| Services | **8** cards (`#services`) |
-| Prices on card | 3 of 8: akrylowe 200–600 zł, szkieletowe 700–1400 zł, elastyczne 600–1200 zł. Naprawy carries a full price list inside its detail. |
+| Services | **8** cards (`#services`) — *built site renders **7** (Szynoprotezy dropped), §11* |
+| Prices on card | 3 of 8: akrylowe 200–600 zł, szkieletowe 700–1400 zł, elastyczne 600–1200 zł. Naprawy carries a full price list inside its detail. — *built cards: 800–1500 / 1500–2500 / 2200–3400 zł, §11* |
 | FAQ | **8** items (`#collapse0` … `#collapse7`), not 7 — see §8 note |
 | NAP | ORDENT; ul. Karola Szymanowskiego 33, 87-300 Brodnica; 601 594 229 / 603 053 437 |
 | Hours | Pon–pt 10–17; sobota usunięta na życzenie klienta (patrz §11); „POGOTOWIE PROTETYCZNE” poza godzinami |
@@ -208,18 +208,24 @@ Chosen over inline `<details>` because the detail copy is long-form (up to ~1 40
 ### 4.7 Video
 - Re-encode `images/elastyczna2.mp4` (17 MB) to `elastyczna2-720.mp4` (~1.5 MB) + `elastyczna2.webm`; extract a poster frame to `elastyczna2-poster.webp` (mandatory — the source has no poster).
 - `<video muted loop playsinline preload="none" poster="…" aria-label="Film: proteza elastyczna wykonana w pracowni ORDENT">` with `<source>` order webm → mp4.
-- **Autoplay only if motion is allowed**: JS checks `matchMedia('(prefers-reduced-motion: reduce)')`; if reduced, autoplay is never called and the poster + play button show instead (WCAG 2.2.2).
+- **Autoplay only if motion and data allow**: an `IntersectionObserver` at `threshold: 0.5` calls `play()` once the clip is half in view, but only when `prefers-reduced-motion: reduce` is absent **and** `navigator.connection` reports neither `saveData` nor 2g; a manual pause sets a `userPaused` ref the observer cannot override. Visible `Pauza` / `Odtwórz` labels (WCAG 2.2.2).
 - A 44×44 overlay button toggles play/pause with visible `Pauza` / `Odtwórz` labels — required, because the loop runs > 5 s.
 - No audio track → no captions required (WCAG 1.2.2 covers audio only).
 
 ### 4.8 Map embed (click-to-load facade)
 Third-party iframe = the page's only non-self-hosted request, and it sets Google cookies. Load it on demand:
 ```
-<button class="btn" data-map>Pokaż mapę</button>  → injects <iframe> once
-<iframe title="Mapa — ORDENT, ul. Karola Szymanowskiego 33, Brodnica"
+<button class="btn btn--primary">Pokaż mapę</button>  → mounts the <iframe> once
+<iframe class="map__frame" title="Mapa — ORDENT, ul. Karola Szymanowskiego 33, Brodnica"
         loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
 ```
-Static facade = `--c-teal-100` block, pin glyph, address, plus a plain `<a href="https://maps.google.com/?q=…">Otwórz w Google Maps</a>` that always works without JS. Keeps the original embed URL. → no cookie banner needed.
+Static facade = `.map__facade`, a locally hosted OpenStreetMap raster
+(`app/public/img/map.jpg` — 15 tiles at z=16 → 1024×512; the only `public/` file the
+generator does not produce) painted `center / cover` over `--c-teal-100`. On it sit
+`.map__panel` (pin glyph, the address, plus a plain
+`<a href="{mapsLink}">Otwórz w Google Maps</a>` that works without JS), the
+„Pokaż mapę" button and a „© OpenStreetMap contributors" credit. Keeps the original
+embed URL. → no third-party request at rest, so no cookie banner needed.
 
 ---
 
@@ -339,6 +345,11 @@ Superseded/broken references in the old markup to drop or fix: `IMG_7766` was li
 The other 14 files (`7739, 7742, 7747, 7749, 7751, 7765, 7770, 8192, 8194, 8196, 8204, 8207, 8216, 9876`) are an unused spare pool — swap one in if a tile looks weak. Note `IMG_7751` is portrait (4000×6000); the 3:2 crop handles it.
 
 ### 7.2 Services ↔ icon ↔ portfolio photo
+**Source order, kept for reference.** The built site renders **7** services in the client's
+order (akrylowe → elastyczne → szkieletowe → korony i mosty → szyny → naprawy → ortodoncja);
+**Szynoprotezy (#4) was dropped on request**, and the `images/portfolio/` column is **not used
+by the rewrite at all** — the service sheets carry copy and prices, no photo. So
+`008-tooth-11.svg` and `04.jpg` are now unused (see §11).
 | # | Service (copy verbatim) | Icon (`images/svg/`) | Dialog photo (`images/portfolio/`) |
 |---|---|---|---|
 | 1 | Protezy akrylowe | `003-tooth-13.svg` | `01.jpg` |
@@ -356,8 +367,8 @@ Icons are used as **CSS masks**, not inlined SVG and not `<img>`:
         mask: var(--i) center/contain no-repeat;
         background-color: var(--c-teal-600); width: 32px; height: 32px; }
 ```
-→ colourable on hover, no 512×512 paths in the JS bundle, no icon font. 34 files exist; **11 are used** (8 services + `007-appointment.svg` for phone CTA + `001-dentist.svg` for the bios + `011-dental-care.svg` for the USP bullet). The rest stay unused.
-**Verify each portfolio photo actually depicts its service before publishing** — the mapping is positional, not confirmed by content.
+→ colourable on hover, no 512×512 paths in the JS bundle, no icon font. 34 files exist; **10 are used** (7 services + `007-appointment.svg` for phone CTA + `001-dentist.svg` for the bios + `011-dental-care.svg` for the USP bullet). `008-tooth-11.svg` is still listed in `ICONS_USED` but no longer referenced by `services.ts`. The rest stay unused.
+**Verify each portfolio photo actually depicts its service before publishing** — the mapping is positional, not confirmed by content. *(Moot for the rewrite: none are rendered.)*
 
 ### 7.3 Everything else
 | File | Slot |
@@ -366,10 +377,10 @@ Icons are used as **CSS masks**, not inlined SVG and not `<img>`:
 | `images/slides/3.jpg` (1900×750) | „O pracowni” section image (4:3 cover) |
 | `images/slides/2.jpg` | unused (killed with the carousel) |
 | `images/gallery/*.jpg` (26) | 12 tiles (§7.1) + 14 spares |
-| `images/portfolio/01..08.jpg` | one per service dialog (§7.2) |
+| `images/portfolio/01..08.jpg` | unused — the rewrite renders no dialog photos (§7.2) |
 | `images/elastyczna2.mp4` | „Dlaczego my?” — re-encoded + poster (§4.7) |
 | `images/elastyczna.mp4` | unused |
-| `images/svg/*.svg` (34) | 11 used via CSS mask (§7.2) |
+| `images/svg/*.svg` (34) | 10 used via CSS mask (§7.2) |
 | `images/banner1.jpg`, `banner3.jpg`, `images/IMG_*.jpg`, `images/06.jpg`, `images/icons/*` | unused |
 | `fonts/BebasNeue-webfont.woff` | wordmark only |
 | `fonts/Inter*.woff2` | **new** — self-hosted, latin-ext subset |
@@ -470,4 +481,7 @@ The spec text above is left as written; these are the decisions taken while buil
 - **Home-screen / PWA icons and manifest.** `index.html` carries `apple-touch-icon` and `site.webmanifest`; the PNGs (`apple-touch-icon.png` 180, `icon-192.png`, `icon-512.png`) are generated by `build_app_icons()` in `tools/build-assets.py` — the favicon's mark on a full-bleed `#0B4F4A` square, drawn at 4× and downscaled. Full bleed with no alpha, because iOS/Android apply their own mask. `site.webmanifest` is a hand-written file in `public/` with relative paths (`start_url: "."`).
 - **Flagship service highlighted.** `services.ts` gained `flag?: boolean` (set on `elastyczne`), `Services.tsx` renders a `ui.flagBadge` label („Nasza specjalność"), and `sections.css` adds `.svc-card--flag` / `.svc-card__flag` — a gold badge, `#fff` on `--c-gold-700` (6,27:1). One card only, per the owner's differentiator.
 - **§4.7 autoplay — gated autoplay shipped.** *(Supersedes the „dropped entirely" entry above.)* `WhyUs.tsx` autoplays once the clip is half in view, but only when `prefers-reduced-motion: reduce` is absent **and** the connection is not metered (`saveData` / 2g), and a manual pause sticks (`userPaused` ref). The poster + 44×44 toggle remains the WCAG 2.2.2 pause control, so §4.7/§5's intent holds. The legacy root `index.html` still autoplays its `images/elastyczna2.mp4` at rest (it is not deployed; left as in the original source).
+- **Price list and service order — client request.** Protezy: akrylowe **800–1500 zł**, elastyczne **1500–2500 zł**, szkieletowe **2200–3400 zł**, rendered in that order. Naprawy keeps 6 rows (pęknięcie 150–250, dostawienie zęba 200, wzmocnienie +50, podścielenie 300, wymiana klamer 120 / 60, samo czyszczenie 50) plus the „2–4 h" and „+50 % za »na już«" notes. **Szynoprotezy removed** (card, detail copy, legacy modal). §0's card prices are the **source** site's and no longer match the built cards.
 - **Phone order + Saturday hours — client request.** Numbers reordered to **601 594 229 first, 603 053 437 second** in `site.ts`, which drives header „Zadzwoń", About, Contact, footer and JSON-LD; `Header.tsx` now takes its `tel:` from `phones[0].href` instead of a hard-coded string. Saturday dropped from `hours` (`Pon–pt 10–17`) and from `openingHours`/`openingHoursSpecification`; §6 and the legacy `index.html` mirror follow. Note the Saturday came from the original site („Pon-pt: 10 - 17, sob 10 – 13"); the old contact block there never showed hours.
+- **§4.8 map facade — self-hosted OSM raster.** The facade carried no map at first; it is now `app/public/img/map.jpg` — 15 OpenStreetMap tiles at z=16 composed to 1024×512 (74 251 B), committed and **not** produced by `tools/build-assets.py` (the only `public/` file outside the generator). It is centred on the address so `cover`'s crop keeps the pin aligned; the pin, address, „Pokaż mapę" button and the „© OpenStreetMap contributors" credit are HTML on top. Still zero third-party requests at rest → still no cookie banner. The legacy `index.html` mirror keeps its iframe source on `data-src`, so a `display:none` iframe never fires the request.
+- **Service grid is 7 cards, not 8.** Szynoprotezy removed on request (see the price-list entry above); §7.2 keeps the source table but marks row 4, `008-tooth-11.svg` and `04.jpg` unused, and notes the rewrite renders no `images/portfolio/` dialog photos at all.

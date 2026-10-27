@@ -1,8 +1,11 @@
 # ordent
 
 Strona pracowni protetycznej ORDENT w Brodnicy. Przebudowa ze statycznego HTML
-na React + Vite + TypeScript. Treść i zdjęcia przeniesione 1:1 ze starej strony
-(`index.html` w katalogu głównym — źródło prawdy dla wszystkich tekstów).
+na React + Vite + TypeScript. Treść i zdjęcia przeniesione ze starej strony
+(`index.html` w katalogu głównym — źródło prawdy dla wszystkich tekstów), a
+następnie zmieniane na życzenie klienta: ceny i kolejność usług, usunięte
+szynoprotezy, kolejność telefonów (601 pierwszy) i usunięta sobota. Każdą taką
+zmianę opisuje `DESIGN-SPEC.md` §11.
 
 ## Uruchomienie
 
@@ -42,12 +45,14 @@ plik `CNAME` (lub wpisz domenę w ustawieniach Pages) i zmień `SITE_URL` na
 
 | Ścieżka | Co |
 |---|---|
-| `app/src/data/site.ts` | dane firmy: nazwa, adres, telefony, godziny |
+| `app/src/data/site.ts` | dane firmy: nazwa, adres, telefony, godziny, `geo`, link do wizytówki |
 | `app/src/data/services.ts` | 7 usług + treść okien „Szczegóły" + cennik |
 | `app/src/data/faq.ts` | 8 pytań FAQ |
 | `app/src/data/gallery.ts` | 12 zdjęć galerii + podpisy |
 | `app/src/data/reviews.ts` | opinie z Google (5 z 13 — resztę Google pokazuje tylko po zalogowaniu) |
 | `app/src/components/` | sekcje strony |
+| `app/src/components/MapEmbed.tsx` | mapa: statyczny `map.jpg` + iframe Google ładowany po kliknięciu |
+| `app/public/img/map.jpg` | ręcznie złożona mapa z kafli OSM — jedyny plik w `public/` spoza generatora |
 | `app/index.html` | `<head>` (meta, OG); adres wstawia build z `SITE_URL` |
 | `app/seo-plugin.ts` | generator JSON-LD, `<noscript>`, `robots.txt`, `sitemap.xml` |
 | `app/src/styles/` | `tokens.css` (zmienne), `app.css`, `sections.css` |
@@ -64,7 +69,8 @@ i wszystkie kopie idą za tobą.
 
 ## Wymiana zdjęć lub filmu
 
-`app/public/` jest w całości generowane. Po podmianie pliku źródłowego
+`app/public/` jest prawie w całości generowane — jedynym wyjątkiem jest
+`app/public/img/map.jpg` (opis niżej). Po podmianie pliku źródłowego
 (hero → `images/slides/`, galeria → `images/gallery/`, zdjęcie o pracowni,
 film) uruchom ponownie:
 
@@ -75,6 +81,24 @@ cd app && npm run build
 
 Zdjęcia galerii są kadrowane do proporcji 3:2. Podmieniając zdjęcie, wybierz
 taki kadr, żeby nie obcinał skrzydeł protezy.
+
+## Mapa (bez ciasteczek)
+
+Mapa startuje jako statyczny obrazek — `app/public/img/map.jpg` — z pinem,
+adresem i linkiem do Google Maps, a iframe Google ładuje się dopiero po
+kliknięciu (`app/src/components/MapEmbed.tsx`). Dzięki temu strona nie wysyła
+na start żadnego żądania do Google i **nie potrzebuje banera zgody na
+ciasteczka**.
+
+`map.jpg` jest **jedynym plikiem w `app/public/`, którego nie generuje
+`tools/build-assets.py`** — to ręcznie złożone kafle OpenStreetMap (15 kafli
+z=16 → 1024×512, JPEG q0.72), więc jest zapisany w repozytorium. Kafle są
+© OpenStreetMap contributors (ODbL) i dlatego atrybucja jest wyświetlana
+w prawym dolnym rogu; obrazek to migawka, więc po zmianie w terenie podmień go
+razem ze źródłem kafli. Podmieniając go, zrób kadr wyśrodkowany na adresie:
+obrazek jest przycinany przez `cover`, a pin i panel leżą na nim w HTML, nie
+w obrazku. Podmieniając sam adres albo współrzędne, zaktualizuj też
+`nap`/`geo`/`mapsLink` w `app/src/data/site.ts`.
 
 ## Do potwierdzenia przed publikacją
 
@@ -96,8 +120,9 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
   Jedna rzecz do zrobienia ręcznie w wizytówce: **dodaj stronę** (Google jej
   nie zna — panel pokazuje „Dodaj witrynę"). Kod pocztowy to `87-300 Brodnica`
   — zgodny ze stroną po potwierdzeniu przez klienta.
-- **Współrzędne** w danych strukturalnych (`geo`) pochodzą ze środka widoku
-  mapy, nie z pomiaru pinu. Warto sprawdzić na miejscu.
+- **Współrzędne** w danych strukturalnych (`geo`) sprawdzone względem Nominatim
+  (zgodność ~5 m) — zostały bez zmian. Ostatecznie warto potwierdzić pomiarem
+  pinu na miejscu.
 - **Teksty** — interpunkcja i sklejenia poprawione (podwójne kropki/spacje,
   przecinek po cudzysłowie, myślniki `-` → `–`), a także trzy sklejenia na
   poziomie słów: „Tzw. Protezy" → „Tzw. protezy", „teżdroższe" → „też droższe",
