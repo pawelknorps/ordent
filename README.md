@@ -17,6 +17,24 @@ npm run preview   # podgląd zbudowanej wersji, http://localhost:4173
 Hosting: `app/dist` to zwykłe pliki statyczne — wystarczy dowolny serwer
 (Nginx, Apache, hosting współdzielony). Nie ma backendu ani SSR.
 
+## Publikacja (GitHub Pages)
+
+Repozytorium: https://github.com/pawelknorps/ordent
+Strona: https://pawelknorps.github.io/ordent/
+
+`.github/workflows/deploy.yml` po każdym pushu na `main` buduje `app/dist`
+i publikuje je jako GitHub Pages. Ręczne uruchomienie: zakładka *Actions* →
+*Deploy to GitHub Pages* → *Run workflow*.
+
+Strona jest serwowana z podkatalogu, dlatego `vite.config.ts` ma
+`base: '/ordent/'`. Vite sam dokleja base do ścieżek w `index.html` i w CSS,
+ale **nie** do ścieżek sklejanych w kodzie TSX — te muszą przechodzić przez
+`asset()` z `app/src/lib/asset.ts`. Nowa ścieżka absolutna bez `asset()`
+działa w dev, a na Pages zwróci 404.
+
+Przy podłączaniu domeny `ordent.pl` do Pages trzeba dodać plik `CNAME`
+(lub wpisać domenę w ustawieniach Pages) i zmienić `base` z powrotem na `'/'`.
+
 ## Gdzie co jest
 
 | Ścieżka | Co |
@@ -50,7 +68,10 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
 
 - **Domena** — `https://ordent.pl` wpisane w canonical, OG/Twitter, JSON-LD,
   `robots.txt` i `sitemap.xml`. Jeśli się zmieni, podmień we wszystkich tych
-  miejscach **oraz** w `public/sitemap.xml`.
+  miejscach **oraz** w `public/sitemap.xml`. Dopóki `ordent.pl` nie jest
+  podłączone, `canonical` i `og:image` (`https://ordent.pl/og.jpg`) wskazują na
+  nieistniejący host — udostępniając link `pawelknorps.github.io/ordent/`
+  w komunikatorze, nie zobaczysz miniatury.
 - **Współrzędne** w danych strukturalnych (`geo`) pochodzą ze środka widoku
   mapy, nie z pomiaru pinu. Warto sprawdzić na miejscu.
 - **Teksty** — interpunkcja i sklejenia poprawione (podwójne kropki/spacje,
