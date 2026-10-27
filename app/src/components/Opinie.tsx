@@ -1,4 +1,4 @@
-import { MAPS_LINK } from './MapEmbed'
+import { mapsLink } from '../data/site'
 import { reviews } from '../data/reviews'
 
 export default function Opinie() {
@@ -14,7 +14,7 @@ export default function Opinie() {
 
         {reviews.length === 0 ? (
           <p className="reveal">
-            <a className="btn btn--ghost" href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
+            <a className="btn btn--ghost" href={mapsLink} target="_blank" rel="noopener noreferrer">
               Zobacz opinie w Google
             </a>
           </p>

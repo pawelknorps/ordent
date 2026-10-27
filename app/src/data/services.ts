@@ -17,6 +17,7 @@ export type Service = {
   title: string
   tagline: string
   price?: string
+  flag?: boolean
   icon: string
   detail: ServiceDetail
 }
@@ -26,7 +27,7 @@ export const services: Service[] = [
     id: 'akrylowe',
     title: 'Protezy akrylowe',
     tagline: 'Sprawdzona estetyka w przystępnej cenie.',
-    price: 'Cena: 200 – 600 zł',
+    price: 'Cena: 800 – 1500 zł',
     icon: '003-tooth-13.svg',
     detail: {
       paragraphs: [
@@ -37,23 +38,11 @@ export const services: Service[] = [
     },
   },
   {
-    id: 'szkieletowe',
-    title: 'Protezy szkieletowe',
-    tagline: 'Lekkie, mocne i komfortowe na co dzień.',
-    price: 'Cena: 700 – 1400 zł',
-    icon: '004-tooth-12.svg',
-    detail: {
-      paragraphs: [
-        'Proteza szkieletowa składa się z elementów metalowych pokrytych akrylem. Jest to rozwiązanie wygodniejsze, ale też droższe niż proteza akrylowa. Użycie metalu sprawia, że „szkielety” mają mniejsze rozmiary i są bardziej komfortowe w użytkowaniu. Mają też większą stabilność, dzięki czemu mówienie i spożywanie posiłków jest zdecydowanie łatwiejsze. Prawidłowo wykonana i dopasowana proteza szkieletowa jest też łatwiejsza do utrzymania w czystości niż proteza akrylowa, co zmniejsza ryzyko infekcji w jamie ustnej. Ogromną jej zaletą jest możliwość stworzenia bardzo cienkiej konstrukcji płyty protezy oraz podparć. Jej twardość jest jednocześnie zaletą jak i wadą, gdyż w sytuacji zaniknięcia wyrostka, możliwe jest wyważanie protezy, co skutkuje rozchwianiem zębów filarowych.',
-        'Do wad tych protez należą metalowe klamry i elementy podpierające tzw. ciernie – niektóre z nich mogą być widoczne, co ma wpływ na estetykę i wygląd pacjenta. Na szczęście istnieje możliwość wymiany takowych klamer na niewidoczne klamry elastyczne w kolorze zęba bądź tkanki dziąsła.',
-      ],
-    },
-  },
-  {
     id: 'elastyczne',
     title: 'Protezy elastyczne',
     tagline: 'Estetyka akrylu i wytrzymałość metalu, bez widocznych klamer.',
-    price: 'Cena: 600 – 1200 zł',
+    price: 'Cena: 1500 – 2500 zł',
+    flag: true,
     icon: '010-protection.svg',
     detail: {
       paragraphs: [
@@ -63,15 +52,15 @@ export const services: Service[] = [
     },
   },
   {
-    id: 'szynoprotezy',
-    title: 'Szynoprotezy',
-    tagline: 'Stabilizacja rozchwianych zębów przy chorobach przyzębia.',
-    icon: '008-tooth-11.svg',
+    id: 'szkieletowe',
+    title: 'Protezy szkieletowe',
+    tagline: 'Lekkie, mocne i komfortowe na co dzień.',
+    price: 'Cena: 2200 – 3400 zł',
+    icon: '004-tooth-12.svg',
     detail: {
       paragraphs: [
-        'Są protezami szkieletowymi stosowanymi w przypadku Pacjentów z chorobami przyzębia, które często prowadzą do pojawienia się ruchomości zębów.',
-        'Szynowanie to zabieg polegający na łączeniu zębów w blok, który wzmacnia rozchwiane zęby, zapobiegając ich przesunięciu lub wyważeniu. Zęby mogą być szynowane na pewien okres np. po zabiegach chirurgicznych lub na stałe. Szynoprotezy mają bardziej rozbudowane klamry, które obejmując zęby „trzymają” je i nie pozwalają na nadmierne, niefizjologiczne ruchy boczne lub przednio-tylne tych zębów. Szynoprotezy spowalniają (a czasem nawet zapobiegają) procesowi utraty zębów zaatakowanych przez paradontozę lub wieloletni kamień nazębny.',
-        'Szynoprotezy są dobrym rozwiązaniem przy znacznej redukcji podparcia tkankowego w resztkowym uzębieniu, kiedy podparcie ozębnowe nie jest silnie zredukowane, ale występują liczne braki zębowe, przy których zastosowanie innego rozwiązania protetycznego nie pozwoliłoby osiągnąć zadowalających rezultatów, przy stabilizowaniu reszty istniejącego uzębienia i w leczeniu protetycznym.',
+        'Proteza szkieletowa składa się z elementów metalowych pokrytych akrylem. Jest to rozwiązanie wygodniejsze, ale też droższe niż proteza akrylowa. Użycie metalu sprawia, że „szkielety” mają mniejsze rozmiary i są bardziej komfortowe w użytkowaniu. Mają też większą stabilność, dzięki czemu mówienie i spożywanie posiłków jest zdecydowanie łatwiejsze. Prawidłowo wykonana i dopasowana proteza szkieletowa jest też łatwiejsza do utrzymania w czystości niż proteza akrylowa, co zmniejsza ryzyko infekcji w jamie ustnej. Ogromną jej zaletą jest możliwość stworzenia bardzo cienkiej konstrukcji płyty protezy oraz podparć. Jej twardość jest jednocześnie zaletą jak i wadą, gdyż w sytuacji zaniknięcia wyrostka, możliwe jest wyważanie protezy, co skutkuje rozchwianiem zębów filarowych.',
+        'Do wad tych protez należą metalowe klamry i elementy podpierające tzw. ciernie – niektóre z nich mogą być widoczne, co ma wpływ na estetykę i wygląd pacjenta. Na szczęście istnieje możliwość wymiany takowych klamer na niewidoczne klamry elastyczne w kolorze zęba bądź tkanki dziąsła.',
       ],
     },
   },
@@ -101,22 +90,22 @@ export const services: Service[] = [
   {
     id: 'naprawy',
     title: 'Naprawy, podścielenia i wymiana klamer na elastyczne',
-    tagline: 'Naprawa zwykle w 2–2,5 h, czyszczenie w cenie.',
+    tagline: 'Naprawa zwykle w 2–4 h, czyszczenie w cenie.',
     icon: '006-tooth-pliers.svg',
     detail: {
       paragraphs: [
         'Oferujemy ekspresową naprawę, uszczelnianie, wzmacnianie, protez zębowych całkowitych, częściowych, szkieletów metalowych czy protez elastycznych. Wyłamane zęby, dostawianie zębów czy klamer, wymiana klamer metalowych na elastyczne i nowe protezy z najlepszych materiałów na rynku. W gratisie czyścimy każdą protezę z osadów kamienia i wszelkich nalotów np. po dymie papierosowym.',
       ],
       priceList: [
-        { label: 'Pęknięcie protezy', price: '40 – 60 zł' },
-        { label: 'Wklejenie siatki / wzmocnienia', price: '30 zł' },
-        { label: 'Dostawienie zęba / klamry metalowej', price: '40 zł za element' },
-        { label: 'Podścielenie', price: '50 – 80 zł' },
+        { label: 'Pęknięcie protezy', price: '150 – 250 zł' },
+        { label: 'Dostawienie zęba / klamry metalowej', price: '200 zł' },
+        { label: 'Wzmocnienie', price: '+50 zł' },
+        { label: 'Podścielenie', price: '300 zł' },
         { label: 'Wymiana klamer na elastyczne', price: '120 zł za pierwszą, 60 zł za każdą kolejną' },
-        { label: 'Samo czyszczenie', price: '20 zł' },
+        { label: 'Samo czyszczenie', price: '50 zł' },
       ],
       notes: [
-        'Czas naprawy to z reguły 2 – 2,5h.',
+        'Czas naprawy to z reguły 2 – 4h.',
         'Jeśli potrzeba zrobić coś „na już”, doliczamy 50% ceny.',
       ],
     },

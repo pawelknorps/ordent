@@ -12,7 +12,7 @@ import sys
 import urllib.request
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 PUB = ROOT / "app" / "public"
@@ -126,6 +126,23 @@ def build_video():
         log("video", f.name, f"{f.stat().st_size // 1024} KB")
 
 
+def build_app_icons():
+    """Home-screen and PWA icons: the favicon's mark on a full-bleed teal square.
+
+    Full bleed (no rounded corners, no alpha) is what iOS and Android's maskable icons
+    expect — the platform applies its own mask, so the corners must not be transparent.
+    Drawn at 4x and downscaled to keep the edges clean.
+    """
+    # Mirrors FAVICON's path above (viewBox 0 0 64 64).
+    mark = [(20, 17), (44, 17), (44, 25), (28, 25), (28, 39), (44, 39), (44, 47), (20, 47)]
+    for size, name in ((180, "apple-touch-icon.png"), (192, "icon-192.png"), (512, "icon-512.png")):
+        ss = size * 4
+        im = Image.new("RGB", (ss, ss), "#0B4F4A")
+        ImageDraw.Draw(im).polygon([(x * ss / 64, y * ss / 64) for x, y in mark], fill="#FBFAF7")
+        im.resize((size, size), Image.LANCZOS).save(PUB / name, "PNG", optimize=True)
+        log("icon", name, f"{size}x{size}")
+
+
 def build_fonts():
     out = PUB / "fonts"
     out.mkdir(parents=True, exist_ok=True)
@@ -149,6 +166,7 @@ def main():
     build_stills()
     build_gallery()
     build_icons()
+    build_app_icons()
     build_video()
     build_fonts()
     if (PUB / "icons.svg").exists():

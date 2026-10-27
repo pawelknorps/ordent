@@ -1,5 +1,6 @@
 import type { CSSProperties, MouseEvent } from 'react'
 import { services } from '../data/services'
+import { ui } from '../data/site'
 import { asset } from '../lib/asset'
 import ServiceDialog from './ServiceDialog'
 
@@ -27,7 +28,7 @@ export default function Services() {
 
         <div className="services__grid">
           {services.map((s) => (
-            <article className="svc-card reveal" key={s.id}>
+            <article className={s.flag ? 'svc-card svc-card--flag reveal' : 'svc-card reveal'} key={s.id}>
               <span className="svc-card__chip">
                 <span
                   className="icon svc-card__icon"
@@ -35,6 +36,7 @@ export default function Services() {
                   style={{ '--i': `url(${asset(`/img/icons/${s.icon}`)})` } as CSSProperties}
                 />
               </span>
+              {s.flag && <p className="svc-card__flag">{ui.flagBadge}</p>}
               <h3 className="svc-card__title">{s.title}</h3>
               <p className="svc-card__tagline">{s.tagline}</p>
               <div className="svc-card__foot">

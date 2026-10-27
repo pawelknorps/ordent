@@ -1,11 +1,9 @@
 import { useState } from 'react'
+import { mapsLink, nap } from '../data/site'
 
 // Original embed URL from index.html — kept as-is.
 const MAP_SRC =
   'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d9544.339697570467!2d19.394949!3d53.270098!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x519a119d71fe23ae!2sPracownia%20Protetyki%20Stomatologicznej%20Dariusz%20Or%C5%82owski!5e0!3m2!1spl!2spl!4v1587213900104!5m2!1spl!2spl'
-
-// Verified Google Business Profile of the same place as the embed (ludocid), 5,0 · 13 opinii.
-export const MAPS_LINK = 'https://maps.google.com/?cid=5880031631405622190'
 
 // Click-to-load facade: the Google iframe (and its cookies) only appears on demand.
 export default function MapEmbed() {
@@ -16,7 +14,7 @@ export default function MapEmbed() {
       {shown ? (
         <iframe
           className="map__frame"
-          title="Mapa — ORDENT, ul. Karola Szymanowskiego 33, Brodnica"
+          title={`Mapa — ${nap.name}, ${nap.street}, ${nap.city}`}
           src={MAP_SRC}
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
@@ -31,11 +29,11 @@ export default function MapEmbed() {
             />
           </svg>
           <p className="map__address">
-            ul. Karola Szymanowskiego 33
+            {nap.street}
             <br />
-            87-301 Brodnica
+            {`${nap.postalCode} ${nap.city}`}
           </p>
-          <a className="map__link" href={MAPS_LINK} target="_blank" rel="noopener noreferrer">
+          <a className="map__link" href={mapsLink} target="_blank" rel="noopener noreferrer">
             Otwórz w Google Maps
           </a>
           <button type="button" className="btn btn--primary" onClick={() => setShown(true)}>

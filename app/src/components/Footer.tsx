@@ -1,4 +1,4 @@
-import { phones, hours, ui } from '../data/site'
+import { hours, nap, phones, ui } from '../data/site'
 
 export default function Footer() {
   return (
@@ -9,9 +9,9 @@ export default function Footer() {
           <p>{ui.copyright}</p>
         </div>
         <address>
-          <strong>ORDENT</strong>
-          <span>ul. Karola Szymanowskiego 33</span>
-          <span>87-301 Brodnica</span>
+          <strong>{nap.name}</strong>
+          <span>{nap.street}</span>
+          <span>{`${nap.postalCode} ${nap.city}`}</span>
           {phones.map((phone) => (
             <a key={phone.href} href={phone.href}>{phone.display}</a>
           ))}

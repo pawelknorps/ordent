@@ -1,3 +1,8 @@
+// The only place holding the public site address: vite `base`, canonical/og, the JSON-LD
+// `@id`/`url`/`image`, robots.txt and sitemap.xml are all derived from it at build time.
+// Change it here (and nothing else) when the domain is connected.
+export const SITE_URL = 'https://pawelknorps.github.io/ordent/'
+
 export const nav = [
   { label: 'Start', href: '#banner' },
   { label: 'Co robimy', href: '#services' },
@@ -13,6 +18,28 @@ export const phones = [
 ]
 
 export const hours = 'Pon–pt 10–17 · sob 10–13'
+
+/** Structured mirror of `hours` for the generated JSON-LD (the two must agree). */
+export const openingHours = [
+  { day: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '10:00', closes: '17:00' },
+  { day: ['Saturday'], opens: '10:00', closes: '13:00' },
+]
+
+/** Single source of the postal address for the components, the map facade and JSON-LD. */
+export const nap = {
+  name: 'ORDENT',
+  street: 'ul. Karola Szymanowskiego 33',
+  postalCode: '87-300',
+  city: 'Brodnica',
+  region: 'kujawsko-pomorskie',
+  country: 'PL',
+}
+
+/** Coordinates taken from the original Google embed — never verified against the pin. */
+export const geo = { latitude: 53.270098, longitude: 19.394949 }
+
+/** Verified Google Business Profile (ludocid) of the same place as the map embed. */
+export const mapsLink = 'https://maps.google.com/?cid=5880031631405622190'
 
 export const usp = 'Jako jedyni w mieście robimy protezy elastyczne'
 
@@ -32,4 +59,5 @@ export const ui = {
   emergency: 'w nagłych wypadkach możliwe przyjęcie poza godzinami pracy.',
   phoneLabel: 'Zadzwoń:',
   hoursLabel: 'Godziny otwarcia:',
+  flagBadge: 'Robimy je jako jedyni',
 }

@@ -26,43 +26,41 @@ Strona: https://pawelknorps.github.io/ordent/
 i publikuje je jako GitHub Pages. Ręczne uruchomienie: zakładka *Actions* →
 *Deploy to GitHub Pages* → *Run workflow*.
 
-Strona jest serwowana z podkatalogu, dlatego `vite.config.ts` ma
-`base: '/ordent/'`. Vite sam dokleja base do ścieżek w `index.html` i w CSS,
-ale **nie** do ścieżek sklejanych w kodzie TSX — te muszą przechodzić przez
-`asset()` z `app/src/lib/asset.ts`. Nowa ścieżka absolutna bez `asset()`
+Strona jest serwowana z podkatalogu, dlatego `vite.config.ts` wyprowadza `base`
+ze `SITE_URL` (patrz niżej). Vite sam dokleja base do ścieżek w `index.html`
+i w CSS, ale **nie** do ścieżek sklejanych w kodzie TSX — te muszą przechodzić
+przez `asset()` z `app/src/lib/asset.ts`. Nowa ścieżka absolutna bez `asset()`
 działa w dev, a na Pages zwróci 404.
 
-Przy podłączaniu domeny `ordent.pl` do Pages trzeba dodać plik `CNAME`
-(lub wpisać domenę w ustawieniach Pages), zmienić `base` z powrotem na `'/'`
-i podmienić adres GitHub Pages na `https://ordent.pl/` we wszystkich miejscach
-z listy niżej.
+Adres publiczny i katalog wdrożenia wynikają z jednej stałej `SITE_URL`
+w `app/src/data/site.ts`. Przy podłączaniu domeny `ordent.pl` do Pages dodaj
+plik `CNAME` (lub wpisz domenę w ustawieniach Pages) i zmień `SITE_URL` na
+`https://ordent.pl/` — `base`, `canonical`, `og:url`, `og:image`, JSON-LD,
+`robots.txt` i `sitemap.xml` wyliczy z niej build.
 
 ## Gdzie co jest
 
 | Ścieżka | Co |
 |---|---|
 | `app/src/data/site.ts` | dane firmy: nazwa, adres, telefony, godziny |
-| `app/src/data/services.ts` | 8 usług + treść okien „Szczegóły" + cennik |
+| `app/src/data/services.ts` | 7 usług + treść okien „Szczegóły" + cennik |
 | `app/src/data/faq.ts` | 8 pytań FAQ |
 | `app/src/data/gallery.ts` | 12 zdjęć galerii + podpisy |
 | `app/src/data/reviews.ts` | opinie z Google (na razie pusta lista — tylko link) |
 | `app/src/components/` | sekcje strony |
-| `app/index.html` | `<head>` (meta, OG, JSON-LD) + awaryjna treść `<noscript>` |
+| `app/index.html` | `<head>` (meta, OG); adres wstawia build z `SITE_URL` |
+| `app/seo-plugin.ts` | generator JSON-LD, `<noscript>`, `robots.txt`, `sitemap.xml` |
 | `app/src/styles/` | `tokens.css` (zmienne), `app.css`, `sections.css` |
 | `tools/build-assets.py` | generator obrazów/filmów/ikon do `app/public/` |
 | `DESIGN-SPEC.md` | specyfikacja + §11 ze zmianami wprowadzonymi w trakcie |
 
 Tekst edytuje się w plikach `src/data/*.ts` — nie ma CMS-a.
 
-Dwa wyjątki, o których łatwo zapomnieć:
-
-- **FAQ jest zduplikowane.** Te same 8 pytań i odpowiedzi leżą w `faq.ts`
-  **oraz** w `app/index.html`, w drugim bloku JSON-LD `FAQPage`. Po edycji
-  `faq.ts` popraw też `index.html` — `index.html` jest statyczny i nie może
-  zaimportować pliku `.ts`, a nic w repo nie sprawdza, czy kopie się zgadzają.
-- **`<noscript>` w `app/index.html`** powtarza NAP (adres, telefony, godziny).
-  Zmieniając dane firmy, zaktualizuj też ten blok — inaczej rozjedzie się
-  z `site.ts`.
+Dane firmy i adres publiczny żyją tylko w `src/data/site.ts`. JSON-LD, awaryjny
+`<noscript>`, `robots.txt` i `sitemap.xml` powstają przy buildzie w
+`app/seo-plugin.ts`, z tych samych danych, które renderuje strona. Nie ma już
+drugiej kopii FAQ ani NAP do pilnowania — zmieniasz `site.ts`, przebudowujesz,
+i wszystkie kopie idą za tobą.
 
 ## Wymiana zdjęć lub filmu
 
@@ -81,11 +79,10 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
 ## Do potwierdzenia przed publikacją
 
 - **Domena** — `ordent.pl` **nie jest podłączone**, więc wszystkie adresy
-  absolutne wskazują na `https://pawelknorps.github.io/ordent/`: `canonical`,
-  `og:url`, `og:image`, JSON-LD (`@id`, `url`, `image`), `Sitemap:`
-  w `robots.txt` i `<loc>` w `sitemap.xml`. Nad `canonical` w `app/index.html`
-  jest `<!-- TODO -->` przypominający o podmianie. Po podłączeniu domeny zmień
-  je wszystkie **plus** `base` w `vite.config.ts`.
+  absolutne (`canonical`, `og:url`, `og:image`, JSON-LD, `Sitemap:`
+  w `robots.txt`, `<loc>` w `sitemap.xml`) wskazują na
+  `https://pawelknorps.github.io/ordent/`. Trzyma je jedna stała `SITE_URL`
+  w `app/src/data/site.ts` — po podłączeniu domeny zmień tylko ją.
 - **Opinie z Google** — sekcja „Opinie" to na razie tylko link do wizytówki.
   Profil ma **5,0 · 13 opinii** (Google oznacza je jako „niezweryfikowane").
   `app/src/data/reviews.ts` ma celowo pustą tablicę; po wklejeniu prawdziwych
@@ -94,10 +91,11 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
   musieć jej odświeżać — sam link wystarcza.
 - **Wizytówka Google** — zweryfikowany adres to
   https://maps.google.com/?cid=5880031631405622190 (ten sam `ludocid`, co
-  w mapie). Leży w `MAPS_LINK` i w `sameAs` danych strukturalnych.
-  Dwie rzeczy do zrobienia ręcznie w wizytówce: **dodaj stronę** (Google jej
-  nie zna — panel pokazuje „Dodaj witrynę") i **ustal kod pocztowy**:
-  wizytówka ma `87-300 Brodnica`, strona `87-301 Brodnica`.
+  w mapie). Leży w `mapsLink` (`app/src/data/site.ts`) i w `sameAs` danych
+  strukturalnych.
+  Jedna rzecz do zrobienia ręcznie w wizytówce: **dodaj stronę** (Google jej
+  nie zna — panel pokazuje „Dodaj witrynę"). Kod pocztowy to `87-300 Brodnica`
+  — zgodny ze stroną po potwierdzeniu przez klienta.
 - **Współrzędne** w danych strukturalnych (`geo`) pochodzą ze środka widoku
   mapy, nie z pomiaru pinu. Warto sprawdzić na miejscu.
 - **Teksty** — interpunkcja i sklejenia poprawione (podwójne kropki/spacje,

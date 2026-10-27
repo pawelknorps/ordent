@@ -594,3 +594,30 @@ dialog.sheet--lightbox {
   color: var(--c-gold-500);
   letter-spacing: .05em;
 }
+
+/* The flagship service (protezy elastyczne) — the site's single differentiator. */
+.svc-card--flag {
+  position: relative;
+  border-color: color-mix(in srgb, var(--c-gold-500) 60%, transparent);
+}
+
+/* Gold stays on hover/focus instead of the base card's teal. */
+.svc-card--flag:hover,
+.svc-card--flag:focus-within {
+  border-color: color-mix(in srgb, var(--c-gold-500) 85%, transparent);
+}
+
+.svc-card__flag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--c-gold-700);
+  color: #fff;
+  font-size: .75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}

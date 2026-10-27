@@ -1,4 +1,4 @@
-import { hours, phones, ui } from '../data/site'
+import { hours, nap, phones, ui } from '../data/site'
 import MapEmbed from './MapEmbed'
 
 export default function Contact() {
@@ -15,11 +15,11 @@ export default function Contact() {
         <div className="contact">
           <div className="contact__info reveal">
             <address className="contact__address">
-              <strong>ORDENT</strong>
+              <strong>{nap.name}</strong>
               <br />
-              ul. Karola Szymanowskiego 33
+              {nap.street}
               <br />
-              87-301 Brodnica
+              {`${nap.postalCode} ${nap.city}`}
             </address>
 
             <p className="contact__phones">
