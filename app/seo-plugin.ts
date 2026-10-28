@@ -49,16 +49,16 @@ const AI_CRAWLERS = [
   'Applebot',
 ]
 
-// „Cena: 200 – 600 zł" → { minPrice: 200, maxPrice: 600 }. An unexpected format fails the build
-// rather than silently dropping the offer from the structured data.
+// „Cena: 200 – 600 zł" → { minPrice: 200, maxPrice: 600 }; the fixed „Cena: 500 zł" → 500/500.
+// An unexpected format fails the build rather than silently dropping the offer.
 function priceSpec(price: string) {
-  const m = /^Cena: (\d+) – (\d+) zł$/.exec(price)
+  const m = /^Cena: (\d+)(?: – (\d+))? zł$/.exec(price)
   if (!m) throw new Error(`seo-plugin: unrecognised price "${price}"`)
   return {
     '@type': 'PriceSpecification',
     priceCurrency: 'PLN',
     minPrice: Number(m[1]),
-    maxPrice: Number(m[2]),
+    maxPrice: Number(m[2] ?? m[1]),
   }
 }
 

@@ -5,6 +5,8 @@
 // rewritten on the client's request for clearer, benefit-first text. Prices and the
 // long-form technical paragraphs otherwise stay as in the source.
 // `notes` holds the two timing lines that sit after the price list in the source modal.
+// The two szyny services («Szyny na bruksizm», «Szyny do wybielania zębów») and their 500 zł
+// prices are the owner's split of the single source „szyny" entry — not source text.
 
 export type ServiceDetail = {
   paragraphs: string[]
@@ -115,19 +117,40 @@ export const services: Service[] = [
   {
     id: 'szyny',
     slug: 'szyny',
-    title: 'Szyny',
+    title: 'Szyny na bruksizm',
     seo: {
       title: 'Szyny na bruksizm Brodnica – pracownia ORDENT',
       description:
         'Szyna relaksacyjna na bruksizm i szczękościsk — chroni zęby i staw skroniowo-żuchwowy, pomaga, gdy zgrzytanie odbiera sen.',
     },
-    tagline: 'Na bruksizm i wybielanie — ochrona zębów i stawu skroniowo-żuchwowego.',
+    tagline: 'Na bruksizm — ochrona zębów i stawu skroniowo-żuchwowego.',
     teaser:
       'Szyna relaksacyjna dla osób zmagających się z bruksizmem. Chroni staw skroniowo-żuchwowy, a zęby przed ścieraniem się i rozchwianiem.',
+    price: 'Cena: 500 zł',
     icon: '016-tooth-10.svg',
     detail: {
       paragraphs: [
         'Szyna relaksacyjna zalecana jest osobom zmagającym się z bruksizmem. Zgrzytanie zębami czy nadmierne zaciskanie szczęki to zaburzenia, które nierzadko prowadzą do upośledzenia funkcjonowania stawu skroniowo-żuchwowego. Uszkodzenie tego stawu z kolei może prowadzić do bólów głowy, karku, kręgosłupa, stawów skroniowo-żuchwowych, a także ścierania się i rozchwiania zębów. Na szynę relaksacyjną najczęściej decydują się osoby, które w swoim codziennym życiu narażone są na stres, będący przyczyną zgrzytania zębami lub szczękościsku. Szyna relaksacyjna sprawdza się zwłaszcza w nocy, kiedy to zaciskanie zębów uniemożliwia spokojny sen, a nierzadko prowadzi do bezsenności.',
+      ],
+    },
+  },
+  {
+    id: 'wybielanie',
+    slug: 'szyny-do-wybielania',
+    title: 'Szyny do wybielania zębów',
+    seo: {
+      title: 'Szyny do wybielania zębów Brodnica – pracownia ORDENT',
+      description:
+        'Szyna do wybielania zębów z pracowni ORDENT w Brodnicy — obok szyny relaksacyjnej na bruksizm. Cena 500 zł.',
+    },
+    tagline: 'Szyna wybielająca zębów.',
+    teaser:
+      'Szyna do wybielania zębów, wykonywana w pracowni obok szyny relaksacyjnej na bruksizm.',
+    price: 'Cena: 500 zł',
+    icon: '008-tooth-11.svg',
+    detail: {
+      paragraphs: [
+        'Szyna do wybielania zębów. Obok szyny relaksacyjnej na bruksizm to druga z szyn wykonywanych w pracowni — obie w tej samej cenie.',
       ],
     },
   },

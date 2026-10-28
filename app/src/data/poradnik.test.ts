@@ -41,8 +41,8 @@ describe('article content', () => {
 })
 
 describe('routes', () => {
-  it('has 18 entries and no duplicates', () => {
-    expect(ROUTES).toHaveLength(18)
+  it('has 19 entries and no duplicates', () => {
+    expect(ROUTES).toHaveLength(19)
     expect(new Set(ROUTES).size).toBe(ROUTES.length)
   })
 })
