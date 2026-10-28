@@ -1,11 +1,12 @@
 import { hours, nap, phones, ui } from '../data/site'
+import { asset } from '../lib/asset'
 
-export default function Footer() {
+export default function Footer({ subpage = false }: { subpage?: boolean }) {
   return (
     <footer className="site-footer">
       <div className="container site-footer__grid">
         <div>
-          <a className="wordmark" href="#banner">ORDENT</a>
+          <a className="wordmark" href={subpage ? asset('/') : '#banner'}>ORDENT</a>
           <p>{ui.copyright}</p>
         </div>
         <address>

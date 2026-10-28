@@ -36,6 +36,9 @@
   background: var(--c-surface);
   border: 1px solid var(--c-line);
   border-radius: var(--r-lg);
+  /* a link card (<a class="svc-card">) must keep the title/tagline colours, not tokens' teal `a` */
+  color: inherit;
+  text-decoration: none;
   transition:
     transform var(--dur-2) var(--ease-out),
     box-shadow var(--dur-2) var(--ease-out),
@@ -736,3 +739,33 @@ dialog.sheet--lightbox {
 .contact__directions {
   grid-column: 1 / -1;
 }
+
+/* ---------------- Sub-pages (service, cennik, poradnik) ---------------- */
+
+/* Breadcrumbs mirror the BreadcrumbList the SEO plugin emits for the same route. */
+.crumbs ol { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-5); padding: 0; list-style: none; font-size: var(--fs-sm) }
+.crumbs li + li::before { content: '/'; margin-right: var(--space-2); color: var(--c-ink-muted) }
+.crumbs a { text-decoration: none }
+.crumbs a:hover, .crumbs a:focus-visible { text-decoration: underline }
+.crumbs [aria-current='page'] { color: var(--c-ink-muted) }
+
+/* Left-aligned, sub-page H1 scale: a sub-page leads with its own heading, not a hero. */
+.page-head { display: grid; gap: var(--space-3); max-width: var(--w-prose); margin-bottom: var(--space-7) }
+.page-head h1 { font-size: var(--fs-h2); line-height: 1.15; letter-spacing: -.015em }
+.page-head .lead { color: var(--c-ink-muted); font-size: var(--fs-lg) }
+
+/* Service page: copy left, price + CTA aside right. */
+.svc-page { display: grid; gap: var(--space-6) }
+.svc-page__body { display: grid; gap: var(--space-4); max-width: var(--w-prose) }
+.svc-page__body h2 { margin-top: var(--space-4) }
+.svc-page__aside { display: grid; gap: var(--space-3); align-content: start }
+.price-box { display: grid; gap: var(--space-3); padding: clamp(20px, 4vw, 28px); background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg) }
+.price-box .svc-card__price { font-size: var(--fs-lg) }
+.price-box .price-list { margin-top: 0 }
+@media (min-width: 900px) {
+  .svc-page { grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-7); align-items: start }
+}
+
+/* Link-card grid used by "Pozostałe usługi" / "Zobacz też". */
+.others { margin-top: var(--space-8) }
+.others h2 { margin-bottom: var(--space-5) }

@@ -5,12 +5,15 @@ import { asset } from '../lib/asset'
 
 const mask = (file: string) => ({ '--i': `url(${asset(`/img/icons/${file}`)})` }) as CSSProperties
 
-export default function Header() {
+export default function Header({ subpage = false }: { subpage?: boolean }) {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const sentinel = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
+
+  // A sub-page has no in-page anchors to jump to, so every hash resolves back on the homepage.
+  const link = (hash: string) => (subpage ? asset('/') + (hash === '#banner' ? '' : hash) : hash)
 
   useEffect(() => {
     const el = sentinel.current
@@ -45,10 +48,10 @@ export default function Header() {
   return (
     <>
       <div ref={sentinel} className="header-sentinel" aria-hidden="true" />
-      <header className={'site-header' + (scrolled || open ? ' is-scrolled' : '')}>
+      <header className={'site-header' + (subpage || scrolled || open ? ' is-scrolled' : '')}>
         <div className="container site-header__inner">
           <a className="skip-link" href="#content">{ui.skip}</a>
-          <a className="wordmark" href="#banner">
+          <a className="wordmark" href={link('#banner')}>
             <span className="icon wordmark__tooth" style={mask('040-tooth.svg')} aria-hidden="true" />
             ORDENT
           </a>
@@ -67,7 +70,7 @@ export default function Header() {
             <ul className="nav__list">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <a href={item.href} onClick={close}>{item.label}</a>
+                  <a href={link(item.href)} onClick={close}>{item.label}</a>
                 </li>
               ))}
             </ul>
