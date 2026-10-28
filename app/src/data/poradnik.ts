@@ -44,8 +44,8 @@ export const articles: Article[] = [
         heading: 'Co wpływa na termin',
         body: [
           'Zanim powiemy ci, kiedy proteza będzie gotowa, musimy znać kolor zębów. Dostępność konkretnej barwy bywa różna, a to wpływa na to, jak szybko możemy zacząć pracę.',
-          'Drugi etap to wzornik oraz ewentualna poprawa ustawienia zębów w wosku. Dopiero gdy te elementy się zgadzają, proteza może zostać ukończona. Dlatego pytając o termin, powiedz od razu, jakiej barwy zębów oczekujesz.',
-          'Jeśli wybrana barwa nie jest dostępna od ręki, poczekasz na nią dłużej. Dlatego pytaj o termin, mając już wybrany kolor zębów.',
+          'Drugi etap to wzornik oraz ewentualna poprawa ustawienia zębów w wosku. Dopiero gdy te elementy się zgadzają, proteza może zostać ukończona.',
+          'Jeśli wybranej barwy nie ma od ręki, poczekasz na nią dłużej — dlatego pytaj o termin, mając już wybrany kolor zębów.',
         ],
       },
       {
@@ -125,7 +125,6 @@ export const articles: Article[] = [
         body: [
           'Klej nie jest rozwiązaniem dla każdego. Sięgnij po niego wtedy, gdy warunki wewnątrzustne są niedostateczne — gdy wyrostki są niskie i proteza nie ma się jak zassać w jamie ustnej.',
           'W takiej sytuacji klej pomaga w lepszym utrzymaniu protezy. Pamiętaj jednak, że wspiera on utrzymanie, a nie zastępuje protezy dopasowanej do twojej jamy ustnej.',
-          'Dla wielu osób to właśnie sposób na pewniejsze utrzymanie w ciągu dnia.',
         ],
       },
       {
@@ -133,14 +132,13 @@ export const articles: Article[] = [
         body: [
           'Cała sztuka polega na ilości. Najczęstszy błąd to nałożenie zbyt dużej porcji kleju — nadmiar nie poprawia utrzymania, liczy się nałożenie punktowe.',
           'W protezie górnej zrób 3 nieduże „kleksy” od strony podniebiennej: po bokach i z przodu. W protezie dolnej nałóż 2 nieduże „kleksy” po bokach. Dopiero tak nałożony klej poprawia utrzymanie.',
-          'Zasada jest prosta: mniej znaczy więcej. Klej stosuj tylko wtedy, gdy proteza nie trzyma się sama — nie na wszelki wypadek.',
+          'Klej stosuj tylko wtedy, gdy proteza nie trzyma się sama — nie na wszelki wypadek.',
         ],
       },
       {
         heading: 'Kiedy proteza nie trzyma się mimo kleju',
         body: [
-          'Jeśli proteza nosi się inaczej niż na początku, zadzwoń do nas — sprawdzimy, jak się trzyma.',
-          'O utrzymaniu decyduje przede wszystkim dopasowanie protezy. Jeśli zależy ci na tym, żeby nosiła się pewniej, porozmawiajmy o tym w pracowni.',
+          'O utrzymaniu decyduje przede wszystkim dopasowanie protezy. Jeśli proteza nosi się inaczej niż na początku, zadzwoń do nas — sprawdzimy, jak się trzyma i co można poprawić.',
         ],
       },
     ],
@@ -174,7 +172,6 @@ export const articles: Article[] = [
         body: [
           'Do mycia używaj szczoteczki do zębów — najlepiej z miękkiego włosia. Pasta powinna mieć niski współczynnik ścieralności.',
           'Równie dobrze sprawdzają się specjalne środki do czyszczenia protez. Oba rozwiązania są przewidziane, więc wybierz to, które jest dla ciebie wygodniejsze.',
-          'Pasta o niskim współczynniku ścieralności i specjalne środki to dwie drogi do tego samego celu. Wybierz jedną i trzymaj się jej.',
         ],
       },
       {
@@ -212,7 +209,7 @@ export const articles: Article[] = [
         heading: 'Pierwsze dni po odebraniu protezy',
         body: [
           'Na początku warto zdejmować protezę na noc. Dzięki temu tkanki wewnątrzustne przyzwyczajają się do nowego uzupełnienia, a ty unikasz ewentualnych ran — na przykład wtedy, gdy proteza jest za długa i trzeba ją lekko przyciąć.',
-          'Ten pierwszy okres ma cię oswoić z protezą. Nie musisz od razu spać w niej na siłę — to czas na przyzwyczajenie, a nie na próbę sił.',
+          'Nie musisz od razu spać w niej na siłę — to czas na przyzwyczajenie, a nie na próbę sił.',
         ],
       },
       {
@@ -226,7 +223,7 @@ export const articles: Article[] = [
         heading: 'Po okresie przystosowawczym',
         body: [
           'Kiedy minie okres przystosowania, zalecamy spanie w protezach. Tkanki, które nie są uciskane, zanikają, a wyrostki zębodołowe się obkurczają.',
-          'Powstaje wtedy przestrzeń między protezą a twoją tkanką, przez co proteza trzyma się gorzej. Dlatego po okresie przystosowawczym zalecamy spanie w protezach.',
+          'Powstaje wtedy przestrzeń między protezą a twoją tkanką, przez co proteza trzyma się gorzej.',
         ],
       },
     ],
@@ -252,7 +249,6 @@ export const articles: Article[] = [
         body: [
           'Większość z nas myje zęby ruchem okrężnym po ich powierzchni. Tymczasem to przestrzenie międzyzębowe gromadzą pozostałości po jedzeniu i bakterie, które niszczą zęby oraz przyzębie.',
           'Właśnie tam trzeba dotrzeć szczoteczką. Zmiana przyzwyczajenia bywa trudna, ale to najważniejsza część codziennej higieny.',
-          'Dlatego samo przejechanie szczoteczką po powierzchni zębów to za mało.',
         ],
       },
       {
@@ -260,7 +256,6 @@ export const articles: Article[] = [
         body: [
           'Myj 2 razy dziennie, przez około 2 minuty, szczoteczką średniotwardą lub twardą.',
           'Włosie prowadź w przestrzenie międzyzębowe pod kątem 45 stopni i ruchem wymiatającym usuwaj resztki. Nie omijaj miejsc, do których szczoteczka zwykle nie dociera.',
-          'Ruch wymiatający jest kluczowy — to on wyciąga resztki z przestrzeni między zębami.',
         ],
       },
       {
@@ -268,7 +263,6 @@ export const articles: Article[] = [
         body: [
           'Przez pierwsze dni możesz zauważyć ból i krew. To dobrze — oznacza, że docierasz tam, gdzie wcześniej szczoteczka nie sięgała.',
           'Nie przerywaj wtedy szczotkowania. Po tygodniu lub dwóch objawy znikną, a ty będziesz cieszyć się zdrowymi i mocnymi zębami przez długie lata.',
-          'Wystarczy kilka dni wytrwałości, żeby nowy nawyk się utrwalił.',
         ],
       },
     ],
@@ -339,16 +333,14 @@ export const articles: Article[] = [
         heading: 'Co mówi reguła 5 lat',
         body: [
           'Reguła to 5 lat — co tyle NFZ refunduje wykonanie nowych protez zębowych powyżej 5 zębów.',
-          'Pięcioletni rytm warto mieć z tyłu głowy, planując wymianę protezy. To jednak ogólna zasada, a nie obietnica dla każdego przypadku — o tym, czy refundacja ci przysługuje, decyduje twoja indywidualna sytuacja.',
+          'Pięcioletni rytm warto mieć z tyłu głowy, planując wymianę protezy. To jednak ogólna zasada, a nie obietnica dla każdego przypadku.',
           'Dlatego o refundację najlepiej zapytać z odpowiednim wyprzedzeniem, jeszcze przed planowaną wymianą.',
         ],
       },
       {
         heading: 'Od czego zależy twoja refundacja',
         body: [
-          'Refundacja zależy od indywidualnego przypadku i nie da się jej potwierdzić z góry bez rozmowy. Dlatego najszybsza droga to telefon do pracowni.',
-          'Nie musisz zgadywać, czy refundacja ci przysługuje. Zadzwoń do nas i opowiedz o swojej sytuacji, a wyjaśnimy, jak wygląda ona w twoim przypadku i co dalej.',
-          'Refundacja to temat, który najłatwiej wyjaśnić w rozmowie — nie musisz samodzielnie interpretować przepisów.',
+          'Refundacja zależy od indywidualnego przypadku i nie da się jej potwierdzić z góry bez rozmowy. Zadzwoń do nas i opowiedz o swojej sytuacji, a wyjaśnimy, jak wygląda ona w twoim przypadku i co dalej.',
         ],
       },
       {
@@ -356,7 +348,6 @@ export const articles: Article[] = [
         body: [
           'W naszej pracowni wykonujemy protezy akrylowe, elastyczne i szkieletowe. Protezy akrylowe to sprawdzone rozwiązanie o dobrej estetyce, elastyczne łączą estetykę akrylu z wytrzymałością metalu, a szkieletowe są mniejsze i bardziej stabilne.',
           'Jeśli nie wiesz, który rodzaj jest dla ciebie, powiedz o tym podczas rozmowy — pomożemy ci wybrać.',
-          'Rodzaj protezy dobieramy do twoich potrzeb, więc warto zapytać, zanim podejmiesz decyzję.',
         ],
       },
       {
@@ -364,7 +355,6 @@ export const articles: Article[] = [
         body: [
           'Szczegółowych informacji o refundacji udzielamy telefonicznie. Zadzwoń do naszego laboratorium w Brodnicy.',
           'Numer telefonu znajdziesz na tej stronie oraz w cenniku. To najszybsza droga, bo każdą sytuację omawiamy indywidualnie.',
-          'Jeśli masz wątpliwości, czy refundacja obejmuje twój przypadek, po prostu zadzwoń — chętnie wyjaśnimy.',
         ],
       },
     ],
