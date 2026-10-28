@@ -3,10 +3,15 @@
 // two cannot drift. SEO-only copy lives here on purpose — the config bundle costs nothing.
 // The site address itself lives only in `src/data/site.ts`; `__SITE_URL__` in index.html is
 // replaced below.
+//
+// `injectHead` is exported because vite-react-ssg reuses one index.html for every prerendered
+// URL and re-applies it per route (see `ssgOptions.onBeforePageRender` in vite.config.ts).
 import type { Plugin } from 'vite'
 import { SITE_URL, geo, hours, mapsLink, nap, openingHours, phones } from './src/data/site.ts'
 import { faq } from './src/data/faq.ts'
-import { services } from './src/data/services.ts'
+import { pages } from './src/data/pages.ts'
+import { services, type Service } from './src/data/services.ts'
+import { CENNIK_PATH, PORADNIK_PATH, ROUTES, headFor, servicePath } from './src/pages/meta.ts'
 
 const DESCRIPTION =
   'Pracownia protetyczna w Brodnicy. Protezy elastyczne, akrylowe i szkieletowe, korony i mosty, szyny, naprawy protez. Jako jedyni w mieście robimy protezy elastyczne.'
@@ -83,33 +88,124 @@ const faqPage = {
 // A literal `<` in the data would close the script element early.
 const jsonLd = (data: unknown) => JSON.stringify(data).replace(/</g, '\\u003c')
 
-const NOSCRIPT = `<h1>${nap.name} – pracownia protetyczna w Brodnicy</h1>
+// Marks the scripts this plugin injects, so a second pass over an already-injected document
+// replaces them instead of stacking a duplicate block.
+const LD_ATTR = ' data-ordent-ld'
+
+// `@id` reference back to the LocalBusiness node declared on `/`. No `AggregateRating`, and the
+// type stays `Service` — see the schema policy in ADR-001.
+function serviceLd(s: Service) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.title,
+    description: s.seo.description,
+    url: `${SITE_URL}${servicePath(s).slice(1)}`,
+    areaServed: { '@type': 'City', name: nap.city },
+    provider: { '@type': 'LocalBusiness', '@id': `${SITE_URL}#ordent`, name: nap.name },
+    ...(s.price
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'PLN',
+            priceSpecification: priceSpec(s.price),
+          },
+        }
+      : {}),
+  }
+}
+
+const breadcrumb = (trail: { name: string; url: string }[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    item: item.url,
+  })),
+})
+
+const urlOf = (path: string) => `${SITE_URL}${path.slice(1)}`
+
+// The two index pages' breadcrumb label is the same string they use as their H1, so the trail
+// cannot drift from the page it describes.
+const INDEX_TRAIL: Record<string, string> = {
+  [CENNIK_PATH]: pages[CENNIK_PATH].h1,
+  [PORADNIK_PATH]: pages[PORADNIK_PATH].h1,
+}
+
+// Home keeps the LocalBusiness + FAQ nodes it has always had. Service pages get Service +
+// BreadcrumbList, whose `provider` points back at the `#ordent` @id declared on `/`. The two
+// index pages get a two-item BreadcrumbList of their own. No BreadcrumbList on `/` — a
+// one-item trail is not a breadcrumb.
+function structuredData(route: string): unknown[] {
+  if (route === '/') return [localBusiness, faqPage]
+
+  const index = INDEX_TRAIL[route]
+  if (index)
+    return [breadcrumb([{ name: 'Start', url: SITE_URL }, { name: index, url: urlOf(route) }])]
+
+  const service = services.find((s) => servicePath(s) === route)
+  if (!service) return []
+
+  return [
+    serviceLd(service),
+    breadcrumb([
+      { name: 'Start', url: SITE_URL },
+      { name: 'Cennik', url: urlOf(CENNIK_PATH) },
+      { name: service.title, url: urlOf(route) },
+    ]),
+  ]
+}
+
+const attr = (value: string) =>
+  value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
+
+/**
+ * Replaces the template's `<title>`, description, canonical and og:* tags with the copy for
+ * `path` and appends its JSON-LD. Idempotent: safe to run on a document a previous pass
+ * already handled (the client build, the dev server, then every prerendered page).
+ */
+export function injectHead(html: string, path: string): string {
+  const { path: route, title, description, canonical } = headFor(path)
+  let out = html.replaceAll('__SITE_URL__', SITE_URL)
+  const set = (re: RegExp, value: string) =>
+    (out = out.replace(re, (_m, a: string, b: string) => a + attr(value) + b))
+
+  out = out.replace(/<title>[\s\S]*?<\/title>/, `<title>${attr(title)}</title>`)
+  set(/(<meta name="description" content=")[^"]*(")/, description)
+  set(/(<meta property="og:title" content=")[^"]*(")/, title)
+  set(/(<meta property="og:description" content=")[^"]*(")/, description)
+  set(/(<link rel="canonical" href=")[^"]*(")/, canonical)
+  set(/(<meta property="og:url" content=")[^"]*(")/, canonical)
+
+  out = out.replace(/<script type="application\/ld\+json" data-ordent-ld>[\s\S]*?<\/script>/g, '')
+  const nodes = structuredData(route)
+  return nodes.length
+    ? out.replace(
+        '</head>',
+        `${nodes.map((n) => `<script type="application/ld+json"${LD_ATTR}>${jsonLd(n)}</script>`).join('')}</head>`,
+      )
+    : out
+}
+
+// Every route now prerenders its own <h1>, so the stub is a contact fallback only.
+const NOSCRIPT = `<p>${nap.name} – pracownia protetyczna w Brodnicy</p>
 <p>${nap.street}<br />${nap.postalCode} ${nap.city}</p>
 <p>${phones.map((p) => `<a href="${p.href}">${p.display}</a>`).join('<br />')}</p>
-<p>${hours}</p>
-<p>Pełna treść strony wymaga włączonego JavaScriptu.</p>`
+<p>${hours}</p>`
+
+const priority = (path: string) =>
+  path === '/' ? '1.0' : path === CENNIK_PATH ? '0.9' : path === PORADNIK_PATH ? '0.5' : '0.8'
 
 export default function seo(): Plugin {
   return {
     name: 'ordent-seo',
-    transformIndexHtml(html) {
+    transformIndexHtml(html, ctx) {
       return {
-        html: html.replaceAll('__SITE_URL__', SITE_URL),
-        tags: [
-          {
-            tag: 'script',
-            attrs: { type: 'application/ld+json' },
-            children: jsonLd(localBusiness),
-            injectTo: 'head',
-          },
-          {
-            tag: 'script',
-            attrs: { type: 'application/ld+json' },
-            children: jsonLd(faqPage),
-            injectTo: 'head',
-          },
-          { tag: 'noscript', children: NOSCRIPT, injectTo: 'body-prepend' },
-        ],
+        html: injectHead(html, ctx.path),
+        tags: [{ tag: 'noscript', children: NOSCRIPT, injectTo: 'body-prepend' }],
       }
     },
     generateBundle() {
@@ -118,10 +214,14 @@ export default function seo(): Plugin {
         fileName: 'robots.txt',
         source: `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`,
       })
+      const urls = ROUTES.map(
+        (path) =>
+          `  <url>\n    <loc>${urlOf(path)}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>${priority(path)}</priority>\n  </url>`,
+      ).join('\n')
       this.emitFile({
         type: 'asset',
         fileName: 'sitemap.xml',
-        source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${SITE_URL}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>1.0</priority>\n  </url>\n</urlset>\n`,
+        source: `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
       })
     },
   }
