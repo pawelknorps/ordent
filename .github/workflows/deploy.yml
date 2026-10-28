@@ -28,6 +28,8 @@ jobs:
       # under app/public/, so CI only has to run the Vite build.
       - run: npm ci
         working-directory: app
+      - run: npm test
+        working-directory: app
       - run: npm run build
         working-directory: app
       - uses: actions/configure-pages@v5
