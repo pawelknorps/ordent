@@ -26,6 +26,8 @@ GALLERY = [
 GALLERY_WIDTHS = (480, 960, 1440)
 # The About photo renders at most ~650 CSS px (2-col grid at >=900px), so 1200 covers 2x.
 ABOUT_WIDTHS = (480, 960, 1200)
+# The hero is full-bleed (sizes=100vw); 1900 is its native width, so that step is never upscaled.
+HERO_WIDTHS = (480, 960, 1900)
 
 ICONS_USED = [
     "003-tooth-13.svg", "004-tooth-12.svg", "010-protection.svg", "008-tooth-11.svg",
@@ -78,8 +80,9 @@ def build_gallery():
 
 def build_stills():
     IMG.mkdir(parents=True, exist_ok=True)
+    # save_variants keeps slides/1.jpg's native 2.5333:1 frame (480x189, 960x379, 1900x750).
     hero = Image.open(ROOT / "images" / "slides" / "1.jpg").convert("RGB")
-    hero.save(IMG / "hero.jpg", "JPEG", quality=80, optimize=True, progressive=True)
+    save_variants(hero, str(IMG / "hero"), HERO_WIDTHS)
     about = cover(Image.open(ROOT / "images" / "slides" / "3.jpg").convert("RGB"), 1200, 900)
     save_variants(about, str(IMG / "about"), ABOUT_WIDTHS)
     og = cover(Image.open(ROOT / "images" / "slides" / "1.jpg").convert("RGB"), 1200, 630)

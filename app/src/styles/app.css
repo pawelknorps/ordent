@@ -67,7 +67,11 @@
 }
 
 /* ============ hero ============ */
-.hero { --c-focus: #fff; position: relative; display: flex; flex-direction: column; justify-content: flex-end; min-height: 72vh; margin-top: calc(-1 * var(--header-h)); color: #fff; background: url('/img/hero.jpg') 50% 30% / cover no-repeat }
+.hero { --c-focus: #fff; position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; min-height: 72vh; margin-top: calc(-1 * var(--header-h)); color: #fff }
+/* the photo is a layer below the scrims; isolation keeps its z-index:-1 inside .hero so the
+   ::before scrim still paints over it instead of the photo escaping the hero's stacking context */
+.hero__media { position: absolute; inset: 0; z-index: -1 }
+.hero__img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30% }
 /* the .45 mid stop is what holds the white <h1> at >=3:1 over the photo's bright blurred equipment */
 .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, var(--c-scrim) 0%, rgba(6, 20, 20, .45) 55%, rgba(6, 20, 20, .10)) }
 /* top scrim only: the transparent unscrolled header (white wordmark + toggle) needs 3:1 on the bright ceiling */
