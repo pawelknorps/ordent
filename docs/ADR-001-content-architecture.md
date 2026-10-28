@@ -88,8 +88,9 @@ Risks to actively re-test after the route split:
 Re-assessed 2026-10-28 against the built output; **not migrating**. The two wins Astro is
 normally bought for are already banked or empty: the image pipeline already exists
 (`<picture>` + WebP `<source>` + JPEG fallback, 480/960/1440 variants, `srcset`/`sizes`,
-explicit dimensions, lazy loading — 81 raster variants, 35 SVGs, mp4/webm sources), and
-Content Collections have nothing to collect while `/poradnik/` is empty. The only real
+explicit dimensions, lazy loading — 86 raster variants, 35 SVGs, mp4/webm sources), and
+Content Collections would have nothing to collect beyond the 8 hand-written articles
+`/poradnik/` ships (see the refined trigger below). The only real
 gain is the client JS: a content page ships 6.8 KB of prerendered HTML plus ~109 KB gz of
 JS (`app.js` 45 KB gz; a *dynamic* `import("./client-*.js")` adding 64 KB gz of React DOM +
 router) to run four interactive things (call bar, open badge, 7 dialogs, lightbox). Because
@@ -98,10 +99,16 @@ costs TBT/INP and mobile data, not LCP, and moves none of the tracked metrics (l
 impressions, calls, direction requests, `tel:` taps).
 
 Switch to Astro when **any** holds:
-1. Poradnik articles are actually being written (Content Collections stop being theoretical), **or**
+1. **The poradnik outgrows a hand-written TS data file** — not merely "articles exist".
+   Decided 2026-10-28 when the first 8 articles were written: 8 static articles in
+   `data/poradnik.ts`, each traceable to an owner-written `faq.ts` question, is less code and
+   less machinery than a Content Collection and has no editorial workflow behind it, so the
+   trigger does **not** fire. Re-read it as "the cadence or the volume makes the data file a
+   maintenance burden" — roughly past ~15 articles, or the moment articles start being written
+   without a code change, **or**
 2. A non-technical editor must publish without git — at which point also adopt Sveltia/Decap
    CMS and move hosting to Cloudflare Pages (free built-in OAuth; GitHub Pages cannot broker
-   git-based CMS auth), **or**
+   git-based CMS auth). This is the trigger that actually subsumes (1) for content, **or**
 3. Field Core Web Vitals (Search Console, not lab) show TBT/INP failing for this site.
 
 Review otherwise at the next quarterly content audit. Do not re-litigate before then.

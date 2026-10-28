@@ -13,7 +13,7 @@ zmianę opisuje `DESIGN-SPEC.md` §11, a plan i zapisane lekcje — `ROADMAP.md`
 cd app
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # -> app/dist (10 prerenderowanych dokumentów)
+npm run build     # -> app/dist (18 prerenderowanych dokumentów)
 npm run lint      # oxlint
 npm test          # vitest
 npm run preview   # podgląd zbudowanej wersji, http://localhost:4173
@@ -24,7 +24,8 @@ Hosting: `app/dist` to zwykłe pliki statyczne — wystarczy dowolny serwer
 `npm run build` prerenderuje każdą trasę do własnego `index.html`
 (`vite-react-ssg`), więc strona działa też bez JavaScriptu.
 
-Tras jest **10**: `/`, `/cennik/`, `/poradnik/` i `/uslugi/<slug>/` × 7. Jeden
+Tras jest **18**: `/`, `/cennik/`, `/poradnik/`, 8 artykułów `/poradnik/<slug>/`
+i `/uslugi/<slug>/` × 7. Jeden
 rejestr tras to `app/src/routes.tsx`. Pełna treść usługi stoi pod własnym
 adresem; na stronie głównej zostaje tylko zajawka w oknie „Szczegóły".
 
@@ -56,7 +57,7 @@ plik `CNAME` (lub wpisz domenę w ustawieniach Pages) i zmień `SITE_URL` na
 | `app/src/data/site.ts` | dane firmy: nazwa, adres, telefony, godziny, `geo`, link do wizytówki |
 | `app/src/data/services.ts` | 7 usług: tytuł, zajawka, `slug`, meta SEO, treść okna „Szczegóły", cennik |
 | `app/src/data/pages.ts` | meta (`<h1>`, title, description) dla `/cennik/` i `/poradnik/` |
-| `app/src/routes.tsx` | rejestr tras — 10 adresów prerenderowanych |
+| `app/src/routes.tsx` | rejestr tras — 18 adresów prerenderowanych |
 | `app/src/pages/` | strony: `/cennik/`, `/poradnik/`, `/uslugi/<slug>/` + `meta.ts` |
 | `app/src/data/faq.ts` | 8 pytań FAQ |
 | `app/src/data/gallery.ts` | 12 zdjęć galerii + podpisy |
@@ -104,6 +105,12 @@ taki kadr, żeby nie obcinał skrzydeł protezy.
 Zdjęcie „O pracowni" trafia na stronę jako `<picture>` w trzech szerokościach
 (`about-480/960/1200`, JPEG + WebP), więc zadbaj o kadr czytelny także
 w najmniejszym wariancie.
+
+Zdjęcie hero (`images/slides/1.jpg`) też jest `<picture>` w trzech szerokościach
+(`hero-480/960/1900`); 1900 to natywna szerokość źródła, więc generator nigdy go
+nie powiększa. Kadr jest zachowany w proporcji źródła, a widoczny fragment
+wyznacza `object-position: 50% 30%` w `app.css` — zmieniając je, sprawdź, czy
+biały nagłówek nadal ma kontrast na jasnym suficie.
 
 ## Mapa (bez ciasteczek)
 

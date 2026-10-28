@@ -97,23 +97,32 @@ Governed by **ADR-001** (`docs/ADR-001-content-architecture.md`, Accepted).
 - [x] `asset()` (`app/src/lib/asset.ts`) must survive the migration — a hardcoded `/img/...`
   breaks the GitHub Pages subpath.
 
-**Exit criteria met**, verified from the built files with JS uninvolved: 10 `index.html`
-prerendered, each with the real copy, exactly one `<title>`/`<h1>`/canonical, 10 distinct
-titles, sitemap listing all 10 URLs, no `AggregateRating`/`Dentist`/`MedicalClinic` markup.
+**Exit criteria met**, verified from the built files with JS uninvolved: every `index.html`
+prerendered with the real copy, exactly one `<title>`/`<h1>`/canonical, all titles distinct,
+sitemap listing every URL, no `AggregateRating`/`Dentist`/`MedicalClinic` markup. 10 URLs at
+the close of this phase; **18 after Weeks 4–5** (`/poradnik/` + 8 articles).
 
 ---
 
 ## Weeks 4–5 — Authority and internal linking
 
-- [ ] Turn FAQ entries into **poradnik** articles (they already answer real patient questions).
-  **(OPEN — no article data yet; `/poradnik/` ships an honest empty state** that links to the
-  cennik and the homepage FAQ rather than duplicating them.)
+- [x] Turn FAQ entries into **poradnik** articles (they already answer real patient questions).
+  **8 articles written 2026-10-28**, one per `faq.ts` entry, in `app/src/data/poradnik.ts`; the
+  index lists them, each has its own prerendered `/poradnik/<slug>/`. Every article's
+  `sourceQuestion` is the verbatim FAQ question and its `opening` is that entry's answer — the
+  sections may only add framing already present in the answer or in `services.ts`. No price, no
+  guarantee, no clinical fact outside those two files. `poradnik.test.ts` asserts the
+  traceability and the route count.
 - [x] Internal linking between service pages, cennik and poradnik; breadcrumbs on every page
   (every service page and both index pages carry `BreadcrumbList`; no orphan pages).
-- [ ] Per-page schema and unique metadata for the new articles. **(Blocked on the articles.)**
+- [x] Per-page schema and unique metadata for the new articles (`Article` + a 3-item
+  `BreadcrumbList` on each; per-article `<title>`/description/canonical from `data/poradnik.ts`).
 
-**Exit criteria:** poradnik index live and orphan pages = 0 — met. First articles not yet
-written; that is the remaining item in this phase.
+**Exit criteria:** poradnik index live and orphan pages = 0 — met, now with the articles that
+were the remaining item. Sitemap 18 URLs. Two articles are weak by construction and should be
+strengthened when the owner supplies more detail: `refundacja-nfz` (19-word source answer) and
+`jak-kleic-protezy` (short, precise source → some restatement). See the essays' open questions
+in the article data's header comment.
 
 ---
 
@@ -128,7 +137,7 @@ added monthly; prices, hours and NAP kept identical across site, GBP and all cit
 
 | Decision | Where | Rationale |
 |---|---|---|
-| Prerender with `vite-react-ssg`; Astro deferred | `docs/ADR-001-...` | Indexability first; Astro rewrites every section. **Re-assessed 2026-10-28 and confirmed — image pipeline already exists, Content Collections empty, JS gain is a non-blocking dynamic import.** |
+| Prerender with `vite-react-ssg`; Astro deferred | `docs/ADR-001-...` | Indexability first; Astro rewrites every section. **Re-assessed 2026-10-28 and confirmed — image pipeline already exists, a TS data file beats Content Collections for 8 static articles, JS gain is a non-blocking dynamic import.** Revisit trigger re-read as "past ~15 articles or a real editorial cadence", not "articles exist". |
 | `/uslugi/<slug>/`, trailing slash, no city segment | `docs/ADR-001-...` | One URL per query; city stays in metadata. |
 | Cookieless analytics, no consent banner | `docs/MEASUREMENT.md` | No cookies ⇒ no personal data ⇒ no banner. |
 | Stay `LocalBusiness`; no `AggregateRating`; no `Dentist`/`MedicalClinic` | `docs/ADR-001-...` | We are a lab, not a provider; self-serving rating markup risks a penalty. |
@@ -159,8 +168,8 @@ premature; ADR-001 records the triggers that would reopen the first two.
 | Prerender/hydration mismatch on time-dependent UI | Open-now badge renders neutral first and computes in `useEffect` — never during render. |
 | Anchor deep links break when service content moves to its own URL | Re-tested after the route split: all 7 dialogs open cleanly at 390×844, one teaser each, link to `/uslugi/<slug>/` visible without scrolling. Re-check if the price tables or teaser copy grow. |
 | GBP hours/NAP drift from the site | One source (`site.ts`); GBP updated by hand in the same week. |
-| `geo` coordinates in `site.ts` are the map-view centre, never verified against the pin | Verify against the GBP pin at cutover before trusting them in JSON-LD. |
-| Two CSS-background stills ship un-resized: `hero.jpg` 67 KB / 1900×750 (`<link rel="preload">`ed, likely the mobile LCP element at ~5× oversize) and `map.jpg` 74 KB / 1024×512 | `about.jpg` was fixed 2026-10-28. `hero.jpg` is the one that matters; fixing it means moving the hero background to a responsive `<picture>`/`image-set`, not just re-encoding. `og.jpg` (1200×630) is correctly sized — leave it. |
+| ~~`geo` coordinates in `site.ts` are the map-view centre, never verified against the pin~~ **Resolved 2026-10-28** | Checked against the GBP pin URL (`@53.2700978,19.3949491`): matches to 6 decimals. Safe in JSON-LD. |
+| ~~Hero still oversized: `hero.jpg` 67 KB / 1900×750, `<link rel="preload">`ed and the likely mobile LCP element~~ **Resolved 2026-10-28** | Moved to a responsive `<picture>` (`hero-{480,960,1900}.{jpg,webp}`, 10.5/28.3/66.8 KB JPEG); the 1900 step is byte-identical to the old file, so framing is unchanged. The preload was removed with it. One un-resized still remains: `map.jpg` (1024×512, 74 KB, hand-composed OSM tiles, CSS background) — accepted, a static facade has no responsive consumer. |
 
 ---
 
