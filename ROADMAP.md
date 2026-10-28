@@ -169,6 +169,33 @@ AI report plus the local metrics, **not** third-party "AI visibility" scores.
 
 ---
 
+## Sub-page polish (owner request, 2026-10-28)
+
+Owner's words: „podstrony jak /uslugi/protezy-szkieletowe/ nie wyglądają jeszcze dobrze i
+profesjonalnie". The four sub-page routes were the only pages on the site that did *not* look
+like the site — no header, no footer, no breadcrumbs, one dense card.
+
+- [x] **`PageShell.tsx`** mounts the same `Header`/`Footer`/`CallBar` the homepage uses; the four
+      sub-pages stop each rendering their own bare shell. The homepage still calls `Header` /
+      `Footer` with no prop, so its markup is unchanged.
+- [x] **Visible breadcrumbs mirror the emitted `BreadcrumbList`** name-for-name and in order, on
+      all four route types. Previously the breadcrumb trail existed only inside the JSON-LD.
+- [x] **Service page restructured** — left copy / right `.price-box` (price + `Zadzwoń` +
+      `Pełny cennik`) from 900 px, single column below; sibling services as an icon-chip
+      `.svc-card` link grid instead of an unstyled nav list.
+- [x] **`/cennik/` and `/poradnik/` lead with a left-aligned `.page-head`** at `--fs-h2` rather
+      than a centred `.section__head`, and their trailing bare link is now a card in „Zobacz też".
+- [x] **Verified from the built output**: visible crumbs and JSON-LD identical on all four route
+      types, no sub-page renders `id="banner"` (the call bar stays visible), header opaque at
+      first paint, footer present, no horizontal overflow at 390/860/1280 px, `.callbar` shows on
+      scroll at 390 px, homepage nav hashes still in-page, zero console messages.
+
+**Not done / noted:** the `/cennik/` service grid leaves three tall near-empty cards beside the
+7-row „Naprawy" table (equal-height grid rows — pre-existing, not introduced here). Fix only if
+the owner flags it; it would mean changing the homepage's own grid.
+
+---
+
 ## Ongoing (never finishes)
 
 Reviews requested from every patient and every review replied to; weekly GBP posts; photos
