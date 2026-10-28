@@ -5,6 +5,7 @@
 // Imports carry explicit `.ts` extensions because tsconfig.node.json compiles this file under
 // `module: nodenext` as part of the Vite config program.
 import { pages } from '../data/pages.ts'
+import { articles, type Article } from '../data/poradnik.ts'
 import { services, type Service } from '../data/services.ts'
 import { nap, SITE_URL } from '../data/site.ts'
 
@@ -19,8 +20,16 @@ const extras = (s: Service) => s as Service & Extras
 export const serviceSlug = (s: Service) => extras(s).slug ?? s.id
 export const servicePath = (s: Service) => `/uslugi/${serviceSlug(s)}/`
 
+export const articlePath = (a: Article) => `${PORADNIK_PATH}${a.slug}/`
+
 /** Every URL the build emits, in sitemap order. */
-export const ROUTES = ['/', CENNIK_PATH, ...services.map(servicePath), PORADNIK_PATH]
+export const ROUTES = [
+  '/',
+  CENNIK_PATH,
+  ...services.map(servicePath),
+  PORADNIK_PATH,
+  ...articles.map(articlePath),
+]
 
 export type Head = { path: string; title: string; description: string; canonical: string }
 
@@ -40,6 +49,11 @@ export function serviceByPath(path: string): Service | undefined {
   return services.find((s) => servicePath(s) === route)
 }
 
+export function articleByPath(path: string): Article | undefined {
+  const route = normalizePath(path)
+  return articles.find((a) => articlePath(a) === route)
+}
+
 export function headFor(path: string): Head {
   const route = normalizePath(path)
   const canonical = `${SITE_URL}${route.slice(1)}`
@@ -53,6 +67,16 @@ export function headFor(path: string): Head {
       title: seo?.title ?? `${service.title} – ${nap.city} | ORDENT`,
       description:
         seo?.description ?? `${service.tagline} — pracownia protetyczna ORDENT w ${nap.city}.`,
+    }
+  }
+
+  const article = articleByPath(route)
+  if (article) {
+    return {
+      path: route,
+      canonical,
+      title: article.seo.title,
+      description: article.seo.description,
     }
   }
 

@@ -2,11 +2,13 @@ import type { ReactNode } from 'react'
 import { StrictMode } from 'react'
 import type { RouteRecord } from 'vite-react-ssg'
 import App from './App'
+import { articles } from './data/poradnik'
 import { services } from './data/services'
 import Cennik from './pages/Cennik'
 import Poradnik from './pages/Poradnik'
+import PoradnikArticle from './pages/PoradnikArticle'
 import ServicePage from './pages/ServicePage'
-import { CENNIK_PATH, PORADNIK_PATH, servicePath } from './pages/meta'
+import { CENNIK_PATH, PORADNIK_PATH, articlePath, servicePath } from './pages/meta'
 
 // vite-react-ssg builds its own client tree, so the StrictMode the old main.tsx rendered is
 // re-applied per route (it renders no DOM, so the prerendered markup is unchanged).
@@ -20,4 +22,8 @@ export const routes: RouteRecord[] = [
   { path: CENNIK_PATH, element: strict(<Cennik />) },
   { path: PORADNIK_PATH, element: strict(<Poradnik />) },
   ...services.map((s) => ({ path: servicePath(s), element: strict(<ServicePage service={s} />) })),
+  ...articles.map((a) => ({
+    path: articlePath(a),
+    element: strict(<PoradnikArticle article={a} />),
+  })),
 ]

@@ -1,10 +1,12 @@
 import CallBar from '../components/CallBar'
 import { pages } from '../data/pages'
+import { articles } from '../data/poradnik'
 import { asset } from '../lib/asset'
-import { CENNIK_PATH, PORADNIK_PATH } from './meta'
+import { CENNIK_PATH, PORADNIK_PATH, articlePath } from './meta'
 
-// Honest empty state: there is no article data yet, and copying the FAQ here would duplicate
-// the homepage copy the ADR warns against. Links out instead of promising what is not written.
+// Index of the published articles, each linking to its own prerendered URL. The cards lead with
+// the short summary rather than the FAQ answer, so this page does not duplicate the homepage
+// copy the ADR warns against.
 export default function Poradnik() {
   const page = pages[PORADNIK_PATH]
 
@@ -20,10 +22,19 @@ export default function Poradnik() {
           <p>{page.description}</p>
         </div>
 
-        <p>Nie opublikowaliśmy jeszcze żadnego artykułu — pracujemy nad nimi.</p>
+        <div className="services__grid">
+          {articles.map((article) => (
+            <article className="svc-card" key={article.slug}>
+              <h2 className="svc-card__title">
+                <a href={asset(articlePath(article))}>{article.title}</a>
+              </h2>
+              <p className="svc-card__tagline">{article.summary}</p>
+            </article>
+          ))}
+        </div>
+
         <p>
-          W międzyczasie zapraszamy do <a href={asset(CENNIK_PATH)}>cennika</a> i na stronę
-          główną, gdzie odpowiadamy na najczęstsze pytania o protezy.
+          <a href={asset(CENNIK_PATH)}>Pełny cennik</a>
         </p>
       </div>
       {/* The sub-pages render no App shell, so the fixed call bar is mounted here; a small

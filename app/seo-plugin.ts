@@ -10,8 +10,16 @@ import type { Plugin } from 'vite'
 import { SITE_URL, geo, hours, mapsLink, nap, openingHours, phones } from './src/data/site.ts'
 import { faq } from './src/data/faq.ts'
 import { pages } from './src/data/pages.ts'
+import { articles, type Article } from './src/data/poradnik.ts'
 import { services, type Service } from './src/data/services.ts'
-import { CENNIK_PATH, PORADNIK_PATH, ROUTES, headFor, servicePath } from './src/pages/meta.ts'
+import {
+  CENNIK_PATH,
+  PORADNIK_PATH,
+  ROUTES,
+  articlePath,
+  headFor,
+  servicePath,
+} from './src/pages/meta.ts'
 
 const DESCRIPTION =
   'Pracownia protetyczna w Brodnicy. Protezy elastyczne, akrylowe i szkieletowe, korony i mosty, szyny, naprawy protez. Jako jedyni w mieście robimy protezy elastyczne.'
@@ -115,6 +123,21 @@ function serviceLd(s: Service) {
   }
 }
 
+// The article page's own node. `publisher` points back at the `#ordent` @id declared on `/`;
+// no `author` or dates — the lab owner writes these, and inventing either would be untrue. No
+// `AggregateRating`, per the schema policy in ADR-001.
+function articleLd(a: Article) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: a.title,
+    description: a.seo.description,
+    url: `${SITE_URL}${articlePath(a).slice(1)}`,
+    inLanguage: 'pl',
+    publisher: { '@type': 'LocalBusiness', '@id': `${SITE_URL}#ordent`, name: nap.name },
+  }
+}
+
 const breadcrumb = (trail: { name: string; url: string }[]) => ({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -137,14 +160,25 @@ const INDEX_TRAIL: Record<string, string> = {
 
 // Home keeps the LocalBusiness + FAQ nodes it has always had. Service pages get Service +
 // BreadcrumbList, whose `provider` points back at the `#ordent` @id declared on `/`. The two
-// index pages get a two-item BreadcrumbList of their own. No BreadcrumbList on `/` — a
-// one-item trail is not a breadcrumb.
+// index pages get a two-item BreadcrumbList of their own; article pages get Article plus a
+// three-item trail. No BreadcrumbList on `/` — a one-item trail is not a breadcrumb.
 function structuredData(route: string): unknown[] {
   if (route === '/') return [localBusiness, faqPage]
 
   const index = INDEX_TRAIL[route]
   if (index)
     return [breadcrumb([{ name: 'Start', url: SITE_URL }, { name: index, url: urlOf(route) }])]
+
+  const article = articles.find((a) => articlePath(a) === route)
+  if (article)
+    return [
+      articleLd(article),
+      breadcrumb([
+        { name: 'Start', url: SITE_URL },
+        { name: pages[PORADNIK_PATH].h1, url: urlOf(PORADNIK_PATH) },
+        { name: article.title, url: urlOf(route) },
+      ]),
+    ]
 
   const service = services.find((s) => servicePath(s) === route)
   if (!service) return []
@@ -197,7 +231,15 @@ const NOSCRIPT = `<p>${nap.name} – pracownia protetyczna w Brodnicy</p>
 <p>${hours}</p>`
 
 const priority = (path: string) =>
-  path === '/' ? '1.0' : path === CENNIK_PATH ? '0.9' : path === PORADNIK_PATH ? '0.5' : '0.8'
+  path === '/'
+    ? '1.0'
+    : path === CENNIK_PATH
+      ? '0.9'
+      : path === PORADNIK_PATH
+        ? '0.5'
+        : path.startsWith(PORADNIK_PATH)
+          ? '0.6'
+          : '0.8'
 
 export default function seo(): Plugin {
   return {
