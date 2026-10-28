@@ -5,7 +5,7 @@ na React + Vite + TypeScript. Treść i zdjęcia przeniesione ze starej strony
 (`index.html` w katalogu głównym — źródło prawdy dla wszystkich tekstów), a
 następnie zmieniane na życzenie klienta: ceny i kolejność usług, usunięte
 szynoprotezy, kolejność telefonów (601 pierwszy) i usunięta sobota. Każdą taką
-zmianę opisuje `DESIGN-SPEC.md` §11.
+zmianę opisuje `DESIGN-SPEC.md` §11, a plan i zapisane lekcje — `ROADMAP.md`.
 
 ## Uruchomienie
 
@@ -13,12 +13,20 @@ zmianę opisuje `DESIGN-SPEC.md` §11.
 cd app
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # -> app/dist (statyczne pliki do wgrania na hosting)
+npm run build     # -> app/dist (10 prerenderowanych dokumentów)
+npm run lint      # oxlint
+npm test          # vitest
 npm run preview   # podgląd zbudowanej wersji, http://localhost:4173
 ```
 
 Hosting: `app/dist` to zwykłe pliki statyczne — wystarczy dowolny serwer
-(Nginx, Apache, hosting współdzielony). Nie ma backendu ani SSR.
+(Nginx, Apache, hosting współdzielony). Nie ma backendu ani serwera SSR:
+`npm run build` prerenderuje każdą trasę do własnego `index.html`
+(`vite-react-ssg`), więc strona działa też bez JavaScriptu.
+
+Tras jest **10**: `/`, `/cennik/`, `/poradnik/` i `/uslugi/<slug>/` × 7. Jeden
+rejestr tras to `app/src/routes.tsx`. Pełna treść usługi stoi pod własnym
+adresem; na stronie głównej zostaje tylko zajawka w oknie „Szczegóły".
 
 ## Publikacja (GitHub Pages)
 
@@ -46,33 +54,44 @@ plik `CNAME` (lub wpisz domenę w ustawieniach Pages) i zmień `SITE_URL` na
 | Ścieżka | Co |
 |---|---|
 | `app/src/data/site.ts` | dane firmy: nazwa, adres, telefony, godziny, `geo`, link do wizytówki |
-| `app/src/data/services.ts` | 7 usług + treść okien „Szczegóły" + cennik |
+| `app/src/data/services.ts` | 7 usług: tytuł, zajawka, `slug`, meta SEO, treść okna „Szczegóły", cennik |
+| `app/src/data/pages.ts` | meta (`<h1>`, title, description) dla `/cennik/` i `/poradnik/` |
+| `app/src/routes.tsx` | rejestr tras — 10 adresów prerenderowanych |
+| `app/src/pages/` | strony: `/cennik/`, `/poradnik/`, `/uslugi/<slug>/` + `meta.ts` |
 | `app/src/data/faq.ts` | 8 pytań FAQ |
 | `app/src/data/gallery.ts` | 12 zdjęć galerii + podpisy |
 | `app/src/data/reviews.ts` | opinie z Google (5 z 13 — resztę Google pokazuje tylko po zalogowaniu) |
 | `app/src/components/` | sekcje strony |
 | `app/src/components/MapEmbed.tsx` | mapa: statyczny `map.jpg` + iframe Google ładowany po kliknięciu |
-| `app/public/img/map.jpg` | ręcznie złożona mapa z kafli OSM — jedyny plik w `public/` spoza generatora |
-| `app/index.html` | `<head>` (meta, OG); adres wstawia build z `SITE_URL` |
-| `app/seo-plugin.ts` | generator JSON-LD, `<noscript>`, `robots.txt`, `sitemap.xml` |
+| `app/public/img/map.jpg` | ręcznie złożona mapa z kafli OSM — jeden z dwóch plików w `public/` spoza generatora (drugi: `site.webmanifest`) |
+| `app/index.html` | bazowy `<head>` (meta, OG); adres i per-trasowe meta wstawia build z `SITE_URL` |
+| `app/seo-plugin.ts` | per-trasowy `<head>` (title, description, canonical), JSON-LD, `<noscript>`, `robots.txt`, `sitemap.xml` |
 | `app/src/styles/` | `tokens.css` (zmienne), `app.css`, `sections.css` |
 | `tools/build-assets.py` | generator obrazów/filmów/ikon do `app/public/` |
 | `DESIGN-SPEC.md` | specyfikacja + §11 ze zmianami wprowadzonymi w trakcie |
+| `ROADMAP.md` | plan, decyzje, ryzyka, zapisane lekcje |
+| `docs/` | ADR-001 (architektura treści), MEASUREMENT (analityka/GSC/GBP), DOMAIN-CUTOVER, GBP-LAUNCH, CITATIONS |
 
 Tekst edytuje się w plikach `src/data/*.ts` — nie ma CMS-a.
 
-Dane firmy i adres publiczny żyją tylko w `src/data/site.ts`. JSON-LD, awaryjny
-`<noscript>`, `robots.txt` i `sitemap.xml` powstają przy buildzie w
-`app/seo-plugin.ts`, z tych samych danych, które renderuje strona. Nie ma już
-drugiej kopii FAQ ani NAP do pilnowania — zmieniasz `site.ts`, przebudowujesz,
-i wszystkie kopie idą za tobą.
+Dane firmy i adres publiczny żyją tylko w `src/data/site.ts`. Per-trasowy
+`<head>` (title, description, canonical), JSON-LD, awaryjny `<noscript>`,
+`robots.txt` i `sitemap.xml` powstają przy buildzie w `app/seo-plugin.ts`,
+z tych samych danych, które renderuje strona. Nie ma już drugiej kopii FAQ ani
+NAP do pilnowania — zmieniasz `site.ts`, przebudowujesz, i wszystkie kopie idą
+za tobą.
+
+Per-trasowe meta istnieją **tylko w buildzie**. `npm run dev` serwuje stronę
+renderowaną po stronie klienta, więc w dev każda trasa pokaże meta strony
+głównej — sprawdzaj `dist/`, nie dev server.
 
 ## Wymiana zdjęć lub filmu
 
-`app/public/` jest prawie w całości generowane — jedynym wyjątkiem jest
-`app/public/img/map.jpg` (opis niżej). Po podmianie pliku źródłowego
-(hero → `images/slides/`, galeria → `images/gallery/`, zdjęcie o pracowni,
-film) uruchom ponownie:
+`app/public/` jest prawie w całości generowane; poza generatorem są tylko
+`app/public/img/map.jpg` (opis niżej) i `app/public/site.webmanifest`. Po
+podmianie pliku źródłowego (hero → `images/slides/1.jpg`, galeria →
+`images/gallery/`, zdjęcie „O pracowni" → `images/slides/3.jpg`, film) uruchom
+ponownie:
 
 ```sh
 python3 tools/build-assets.py     # wymaga Pillow + ffmpeg
@@ -82,6 +101,10 @@ cd app && npm run build
 Zdjęcia galerii są kadrowane do proporcji 3:2. Podmieniając zdjęcie, wybierz
 taki kadr, żeby nie obcinał skrzydeł protezy.
 
+Zdjęcie „O pracowni" trafia na stronę jako `<picture>` w trzech szerokościach
+(`about-480/960/1200`, JPEG + WebP), więc zadbaj o kadr czytelny także
+w najmniejszym wariancie.
+
 ## Mapa (bez ciasteczek)
 
 Mapa startuje jako statyczny obrazek — `app/public/img/map.jpg` — z pinem,
@@ -90,8 +113,8 @@ kliknięciu (`app/src/components/MapEmbed.tsx`). Dzięki temu strona nie wysyła
 na start żadnego żądania do Google i **nie potrzebuje banera zgody na
 ciasteczka**.
 
-`map.jpg` jest **jedynym plikiem w `app/public/`, którego nie generuje
-`tools/build-assets.py`** — to ręcznie złożone kafle OpenStreetMap (15 kafli
+`map.jpg` to jeden z **dwóch plików w `app/public/`, których nie generuje
+`tools/build-assets.py`** (drugi to `site.webmanifest`) — to ręcznie złożone kafle OpenStreetMap (15 kafli
 z=16 → 1024×512, JPEG q0.72), więc jest zapisany w repozytorium. Kafle są
 © OpenStreetMap contributors (ODbL) i dlatego atrybucja jest wyświetlana
 w prawym dolnym rogu; obrazek to migawka, więc po zmianie w terenie podmień go
@@ -102,11 +125,16 @@ w obrazku. Podmieniając sam adres albo współrzędne, zaktualizuj też
 
 ## Do potwierdzenia przed publikacją
 
+Ręczne kroki po stronie właściciela (wizytówka Google, cytowania, opinie,
+analityka) są rozpisane w `docs/GBP-LAUNCH.md`, `docs/CITATIONS.md`
+i `docs/MEASUREMENT.md`.
+
 - **Domena** — `ordent.pl` **nie jest podłączone**, więc wszystkie adresy
   absolutne (`canonical`, `og:url`, `og:image`, JSON-LD, `Sitemap:`
   w `robots.txt`, `<loc>` w `sitemap.xml`) wskazują na
   `https://pawelknorps.github.io/ordent/`. Trzyma je jedna stała `SITE_URL`
-  w `app/src/data/site.ts` — po podłączeniu domeny zmień tylko ją.
+  w `app/src/data/site.ts` — po podłączeniu domeny zmień tylko ją. Kroki
+  w `docs/DOMAIN-CUTOVER.md`.
 - **Opinie z Google** — profil ma **5,0 · 13 opinii** (Google oznacza je jako
   „niezweryfikowane"). `app/src/data/reviews.ts` zawiera **5 prawdziwych opinii**
   przepisanych dosłownie z wizytówki — tyle Google pokazuje bez logowania;
@@ -131,9 +159,10 @@ w obrazku. Podmieniając sam adres albo współrzędne, zaktualizuj też
   Reszta drobnicy („dostawianie", listy typu „Porcelanowe.", numeracja „ad. ")
   zostawiona dosłownie. Do korekty redakcyjnej, jeśli ma być.
 - **Karty usług** — na życzenie klienta przepisane na nowo (klucz w leadzie
-  sekcji i 8 `tagline` w `services.ts` + rozbite na zdania „Korony i mosty"),
+  sekcji i 7 `tagline` w `services.ts` + rozbite na zdania „Korony i mosty"),
   żeby były krótsze i mówiły korzyścią, a nie cechą. Ceny i długie akapity
   techniczne w oknach „Szczegóły" zostały jak w źródle — żadnych nowych
-  twierdzeń. Dla usług, gdzie nie znamy ceny, karta nie pokazuje ceny.
+  twierdzeń. Dla usług, gdzie nie znamy ceny, karta nie pokazuje ceny, a na
+  `/cennik/` stoi „Cena do ustalenia" — **nigdzie nie wpisano wymyślonej ceny**.
 - **Atrybucja ikon** w stopce („Ikony: Freepik (flaticon.com)") — zostawiona,
   bo tak było oryginalnie i tak wymaga licencja Flaticon.
