@@ -1,6 +1,6 @@
 /* ============ shared primitives (frozen contract) ============ */
 .container { width: 100%; max-width: var(--w-content); margin-inline: auto; padding-inline: 20px }
-.section { padding-block: clamp(56px, 9vw, 112px) }
+.section { padding-block: clamp(40px, 6vw, 72px) }
 .section__head { display: grid; gap: var(--space-3); max-width: 62ch; margin: 0 auto var(--space-7); text-align: center }
 .section__title { font-size: var(--fs-h2); line-height: 1.15; letter-spacing: -.015em }
 
