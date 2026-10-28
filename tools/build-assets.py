@@ -24,6 +24,8 @@ GALLERY = [
     "IMG_7142", "IMG_7148", "IMG_7766", "IMG_7768", "IMG_8211", "IMG_8212",
 ]
 GALLERY_WIDTHS = (480, 960, 1440)
+# The About photo renders at most ~650 CSS px (2-col grid at >=900px), so 1200 covers 2x.
+ABOUT_WIDTHS = (480, 960, 1200)
 
 ICONS_USED = [
     "003-tooth-13.svg", "004-tooth-12.svg", "010-protection.svg", "008-tooth-11.svg",
@@ -79,7 +81,7 @@ def build_stills():
     hero = Image.open(ROOT / "images" / "slides" / "1.jpg").convert("RGB")
     hero.save(IMG / "hero.jpg", "JPEG", quality=80, optimize=True, progressive=True)
     about = cover(Image.open(ROOT / "images" / "slides" / "3.jpg").convert("RGB"), 1200, 900)
-    about.save(IMG / "about.jpg", "JPEG", quality=80, optimize=True, progressive=True)
+    save_variants(about, str(IMG / "about"), ABOUT_WIDTHS)
     og = cover(Image.open(ROOT / "images" / "slides" / "1.jpg").convert("RGB"), 1200, 630)
     og.save(PUB / "og.jpg", "JPEG", quality=84, optimize=True, progressive=True)
     log("stills", hero.size, about.size, og.size)
