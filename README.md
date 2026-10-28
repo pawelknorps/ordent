@@ -166,7 +166,7 @@ i `docs/MEASUREMENT.md`.
   Reszta drobnicy („dostawianie", listy typu „Porcelanowe.", numeracja „ad. ")
   zostawiona dosłownie. Do korekty redakcyjnej, jeśli ma być.
 - **Karty usług** — na życzenie klienta przepisane na nowo (klucz w leadzie
-  sekcji i 7 `tagline` w `services.ts` + rozbite na zdania „Korony i mosty"),
+  sekcji i 8 `tagline` w `services.ts` + rozbite na zdania „Korony i mosty"),
   żeby były krótsze i mówiły korzyścią, a nie cechą. Ceny i długie akapity
   techniczne w oknach „Szczegóły" zostały jak w źródle — żadnych nowych
   twierdzeń. Dla usług, gdzie nie znamy ceny, karta nie pokazuje ceny, a na

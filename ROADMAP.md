@@ -49,8 +49,8 @@ Highest ROI, smallest diff. Nothing here depends on the domain cutover.
       existing `openingHours` data via `app/src/lib/openingHours.ts` (Europe/Warsaw,
       unit-tested), on the About and Contact hours lines.
 - [x] **Emergency callout → real `tel:` link** in About and Contact; directions CTA in Contact.
-- [x] **Complete the price list** — all 7 services on `/cennik/`. Three carry a price; three
-      unpriced services (`korony-i-mosty`, `szyny`, `ortodoncja`) state **„Cena do ustalenia"**
+- [x] **Complete the price list** — every service on `/cennik/`. The two without a price
+      (`korony-i-mosty`, `ortodoncja`) state **„Cena do ustalenia"**
       by the owner's decision. **No price was invented.** The owner still has to supply them.
 - [x] Homepage `<h1>` now carries the city and the brand — `Pracownia protetyczna ORDENT w
       Brodnicy` instead of a bare `Pracownia protetyczna`. The intended string already sat
@@ -190,9 +190,28 @@ like the site — no header, no footer, no breadcrumbs, one dense card.
       first paint, footer present, no horizontal overflow at 390/860/1280 px, `.callbar` shows on
       scroll at 390 px, homepage nav hashes still in-page, zero console messages.
 
-**Not done / noted:** the `/cennik/` service grid leaves three tall near-empty cards beside the
+**Not done / noted:** the `/cennik/` service grid leaves two tall near-empty cards beside the
 7-row „Naprawy" table (equal-height grid rows — pre-existing, not introduced here). Fix only if
 the owner flags it; it would mean changing the homepage's own grid.
+
+---
+
+## Szyny split (owner request, 2026-10-28)
+
+„szyny bym rozdzielił na szyny na bruksizm jak są i dostał szyny do wybielania zębów.
+Obie pozycje po 500zl."
+
+- [x] **One service became two** — „Szyny na bruksizm" (slug stays `szyny`, the existing URL) and
+      „Szyny do wybielania zębów" (`szyny-do-wybielania`), both **500 zł**. `/cennik/`, the
+      homepage grid and the „Szczegóły" dialogs pick both up from `services.ts`; no page
+      component changed. Routes **18 → 19**.
+- [x] **`seo-plugin.ts`'s `priceSpec` accepts a fixed price** — `Cena: 500 zł` → min == max; the
+      range form is unchanged, so a priced service now emits an `Offer` in the JSON-LD instead of
+      being skipped.
+- [x] **The new page's copy is built only from existing source strings.** The source held no
+      whitening text beyond „Szyny relaksacyjne na bruksizm i wybielające", so the page states
+      the name, the pairing with the bruksism szyna and the price — and invents no clinical
+      claim, dose or guarantee.
 
 ---
 

@@ -35,11 +35,12 @@ field **empty** until the owner sets one.
 | Protezy elastyczne | 1500 – 2500 zł |
 | Protezy szkieletowe | 2200 – 3400 zł |
 | Korony i mosty | do ustalenia |
-| Szyny | do ustalenia |
+| Szyny na bruksizm | 500 zł |
+| Szyny do wybielania zębów | 500 zł |
 | Ortodoncja | do ustalenia |
 | Naprawy, podścielenia i wymiana klamer na elastyczne | wg pozycji poniżej |
 
-`Korony i mosty`, `Szyny` i `Ortodoncja` **nie mają jeszcze ceny w `services.ts`** — nie
+`Korony i mosty` i `Ortodoncja` **nie mają jeszcze ceny w `services.ts`** — nie
 zgaduj liczby, wpisz `do ustalenia`.
 
 ### Naprawy — szczegółowe pozycje (osobne usługi w GBP)

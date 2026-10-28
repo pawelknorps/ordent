@@ -13,7 +13,7 @@ Source of truth for copy: `index.html`. Nothing is rewritten unless listed in §
 
 | Item | Reality in `index.html` |
 |---|---|
-| Services | **8** cards (`#services`) — *built site renders **7** (Szynoprotezy dropped), §11* |
+| Services | **8** cards (`#services`) — *built site renders 8: Szynoprotezy dropped, the szyny entry split in two, §11* |
 | Prices on card | 3 of 8: akrylowe 200–600 zł, szkieletowe 700–1400 zł, elastyczne 600–1200 zł. Naprawy carries a full price list inside its detail. — *built cards: 800–1500 / 1500–2500 / 2200–3400 zł, §11* |
 | FAQ | **8** items (`#collapse0` … `#collapse7`), not 7 — see §8 note |
 | NAP | ORDENT; ul. Karola Szymanowskiego 33, 87-300 Brodnica; 601 594 229 / 603 053 437 |
@@ -345,11 +345,14 @@ Superseded/broken references in the old markup to drop or fix: `IMG_7766` was li
 The other 14 files (`7739, 7742, 7747, 7749, 7751, 7765, 7770, 8192, 8194, 8196, 8204, 8207, 8216, 9876`) are an unused spare pool — swap one in if a tile looks weak. Note `IMG_7751` is portrait (4000×6000); the 3:2 crop handles it.
 
 ### 7.2 Services ↔ icon ↔ portfolio photo
-**Source order, kept for reference.** The built site renders **7** services in the client's
-order (akrylowe → elastyczne → szkieletowe → korony i mosty → szyny → naprawy → ortodoncja);
-**Szynoprotezy (#4) was dropped on request**, and the `images/portfolio/` column is **not used
-by the rewrite at all** — the service sheets carry copy and prices, no photo. So
-`008-tooth-11.svg` and `04.jpg` are now unused (see §11).
+**Source order, kept for reference.** The built site renders **8** services in the client's
+order (akrylowe → elastyczne → szkieletowe → korony i mosty → szyny na bruksizm → szyny do
+wybielania zębów → naprawy → ortodoncja); **Szynoprotezy (#4) was dropped on request** and
+the source's single **„Szyny" (#6) row was split into the two szyny services on request**
+(see §11), and the `images/portfolio/` column is **not used by the rewrite at all** — the
+service sheets carry copy and prices, no photo. So `04.jpg` stays unused, while
+`008-tooth-11.svg` — free since Szynoprotezy was dropped — is now the whitening szyna's icon
+(see §11).
 | # | Service (copy verbatim) | Icon (`images/svg/`) | Dialog photo (`images/portfolio/`) |
 |---|---|---|---|
 | 1 | Protezy akrylowe | `003-tooth-13.svg` | `01.jpg` |
@@ -367,7 +370,7 @@ Icons are used as **CSS masks**, not inlined SVG and not `<img>`:
         mask: var(--i) center/contain no-repeat;
         background-color: var(--c-teal-600); width: 32px; height: 32px; }
 ```
-→ colourable on hover, no 512×512 paths in the JS bundle, no icon font. 34 files exist; **10 are used** (7 services + `007-appointment.svg` for phone CTA + `001-dentist.svg` for the bios + `011-dental-care.svg` for the USP bullet). `008-tooth-11.svg` is still listed in `ICONS_USED` but no longer referenced by `services.ts`. The rest stay unused.
+→ colourable on hover, no 512×512 paths in the JS bundle, no icon font. 34 files exist; **11 are used** (8 services + `007-appointment.svg` for phone CTA + `001-dentist.svg` for the bios + `011-dental-care.svg` for the USP bullet), all eleven listed in `ICONS_USED`. The rest stay unused.
 **Verify each portfolio photo actually depicts its service before publishing** — the mapping is positional, not confirmed by content. *(Moot for the rewrite: none are rendered.)*
 
 ### 7.3 Everything else
@@ -499,3 +502,4 @@ The spec text above is left as written; these are the decisions taken while buil
 - **SEO head, sitemap dates and the crawler policy (2026-10-28).** Article pages now emit `og:type=article`, a route-specific `twitter:title`/`description`, and `datePublished`/`dateModified`/`mainEntityOfPage` (absolute self-url) on the Article node; every sitemap `<url>` gains `<lastmod>`. Publish and content-updated are **two** constants: `ARTICLE_PUBLISHED` never moves, `CONTENT_UPDATED` drives `<lastmod>` + `dateModified`. `robots.txt` names the ten search/index crawlers with an explicit `Allow` (the one lever with provider-confirmed citation consequences); the training-only tokens stay governed by `*`, and the retired `anthropic-ai`/`Claude-Web` tokens are not emitted. Rationale, the declined options (`llms.txt`, bot-only markdown, hidden summary blocks) and the sources are in `docs/AI-VISIBILITY.md`. Still **no `author`**, no `AggregateRating`, no `Dentist`/`MedicalClinic`.
 - **Poradnik copy — tightened, not padded, owner request (2026-10-28).** Fourteen near-duplicate or filler sentences dropped or merged across articles 1, 3, 4, 5, 6 and 8 (8 insertions / 18 deletions in `poradnik.ts`); `opening`, `summary`, `sourceQuestion`, `seo`, `related` and `relatedArticles` were not touched, and no fact was added or removed. The eight `faq.ts` answers were already fully used in their articles, so any *new* sentence could only be invention (forbidden) or padding — hence deletions. This is the first real edit to the article copy since publication, which is why the visible „Zaktualizowano" date remains off until the owner asks for it.
 - **Sub-page shell — the four sub-page routes get the homepage's chrome, owner request (2026-10-28).** „podstrony jak /uslugi/protezy-szkieletowe/ nie wyglądają jeszcze dobrze i profesjonalnie". They rendered a bare shell — a lone wordmark link and a centred heading, no header, footer, breadcrumbs or call bar. A new `PageShell.tsx` mounts the same `Header`/`Footer`/`CallBar` the homepage uses; the four pages stop mounting their own. `Header`/`Footer` take an optional `subpage` prop that remaps the nav hashes back to the homepage (`/ordent/#services`) and forces `is-scrolled` from the first paint, since a sub-page has no hero to sit over; the homepage still calls both with no prop, so **its markup is unchanged** — verified in `dist/index.html`. **Visible breadcrumbs** (`.crumbs`, inside `main`) now mirror the `BreadcrumbList` `seo-plugin.ts` emits, name-for-name and in order, on all four route types; the spec's trail existed only inside the JSON-LD before, and the two must stay in sync. Layout: `.page-head` replaces the centred `.section__head` at `--fs-h2`; `.svc-page` is a two-column copy + `.price-box` grid from 900 px (price, `Zadzwoń` and `Pełny cennik` in one box) collapsing to single column below; `.others` is a `.svc-card` link-card grid, and `.svc-card` gained `color: inherit; text-decoration: none` so the existing card styling can be a link. Skipped: an eyebrow above the h1 (the breadcrumb *is* the eyebrow), a nav column in the shared `Footer`, and a price icon card (no icon exists → ghost button). Verified from `dist/` with JS uninvolved, at 390/860/1280 px, and in Arc: crumbs == JSON-LD on every route type, no sub-page renders `id="banner"` (so the call bar stays visible), no horizontal overflow, zero console messages. The `/cennik/` grid's three tall near-empty cards beside the 7-row „Naprawy" table is pre-existing (equal-height grid rows) and was left alone — fixing it would touch the homepage's own grid.
+- **Szyny split in two — two services, both 500 zł, owner request (2026-10-28).** The source offered one „Szyny" service („Szyny relaksacyjne na bruksizm i wybielające"); the client split it into **„Szyny na bruksizm"** (slug `szyny`, the existing URL left unchanged on purpose) and **„Szyny do wybielania zębów"** (slug `szyny-do-wybielania`), each **500 zł**. Neither the slug nor the icon of the surviving service moved, so no redirect is needed and none was added (the project has no redirect infrastructure). `services.ts` stays the single source: the homepage grid, the „Szczegóły" dialogs, `/cennik/`, the `Service` JSON-LD and the sitemap all pick the second service up with **no page component edited**; routes **18 → 19**. *(Supersedes the „Price list completed — and four services left deliberately unpriced" entry: unpriced is now two, `korony-i-mosty` and `ortodoncja`.)* `seo-plugin.ts`'s `priceSpec` gained an optional upper bound — `/^Cena: (\d+)(?: – (\d+))? zł$/`, `min == max` for a fixed price — so a non-range price now yields an `Offer` instead of throwing at build time. The new page's copy is drawn **only** from existing strings: the source held no whitening text beyond that one card phrase, so the page states the name, the pairing with the bruksism szyna and the price, and invents **no** clinical claim, dose or guarantee — accepted by the owner as deliberately thin („Zbuduj z tego, co już jest").
