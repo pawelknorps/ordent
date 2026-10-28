@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { gallery } from '../data/gallery'
+import { SHOW_CAPTIONS, gallery } from '../data/gallery'
 import { asset } from '../lib/asset'
 import Lightbox from './Lightbox'
 
@@ -26,6 +26,7 @@ export default function Gallery() {
                 type="button"
                 className="tile"
                 aria-haspopup="dialog"
+                aria-label={SHOW_CAPTIONS ? undefined : `Powiększ zdjęcie ${i + 1} z ${gallery.length}`}
                 onClick={() => setOpenIndex(i)}
               >
                 <picture>
@@ -44,7 +45,7 @@ export default function Gallery() {
                     loading={i < 4 ? 'eager' : 'lazy'}
                   />
                 </picture>
-                <span className="tile__caption">{item.caption}</span>
+                {SHOW_CAPTIONS && <span className="tile__caption">{item.caption}</span>}
               </button>
             </li>
           ))}

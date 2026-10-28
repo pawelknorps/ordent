@@ -1,5 +1,13 @@
 // g01..g12 map to IMG_7005, 7006, 7008, 7009, 7012, 7141, 7142, 7148, 7766, 7768, 8211, 8212.
-// Captions describe what each photo actually shows; the tile aria-label and <img alt> both use them.
+//
+// The captions said what each photo shows, but the owner reports them as mixed up (2026-10-28),
+// so they are hidden, not deleted: `SHOW_CAPTIONS = true` puts every one of them back on the
+// tiles and in the lightbox, and nothing else has to change. They are kept verbatim below.
+//
+// While hidden, the tile button carries a neutral aria-label and the lightbox dialog is named
+// by position — the photos have no trustworthy description, so they claim none.
+
+export const SHOW_CAPTIONS = false
 
 export type GalleryItem = { id: string; caption: string }
 

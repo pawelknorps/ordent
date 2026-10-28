@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { KeyboardEvent, MouseEvent } from 'react'
-import { gallery } from '../data/gallery'
+import { gallery, SHOW_CAPTIONS } from '../data/gallery'
 import { asset } from '../lib/asset'
 
 type Props = {
@@ -38,7 +38,8 @@ export default function Lightbox({ index, onIndex, onClose }: Props) {
     <dialog
       ref={ref}
       className="sheet sheet--lightbox"
-      aria-labelledby="lightbox-caption"
+      aria-labelledby={SHOW_CAPTIONS ? 'lightbox-caption' : undefined}
+      aria-label={SHOW_CAPTIONS ? undefined : `Zdjęcie ${index + 1} z ${total}`}
       onKeyDown={handleKeyDown}
       onClose={onClose}
       onClick={handleBackdrop}
@@ -50,12 +51,14 @@ export default function Lightbox({ index, onIndex, onClose }: Props) {
           src={asset(`/img/gallery/${item.id}-1440.jpg`)}
           width={1440}
           height={960}
-          alt={item.caption}
+          alt={SHOW_CAPTIONS ? item.caption : ''}
         />
       </picture>
-      <p className="lightbox__caption" id="lightbox-caption">
-        {item.caption}
-      </p>
+      {SHOW_CAPTIONS && (
+        <p className="lightbox__caption" id="lightbox-caption">
+          {item.caption}
+        </p>
+      )}
       <div className="lightbox__controls">
         <button type="button" className="btn btn--ghost" onClick={() => go(-1)}>
           Poprzednie zdjęcie

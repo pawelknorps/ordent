@@ -410,7 +410,9 @@
   transition: transform var(--dur-2) var(--ease-out);
 }
 
-/* The tile's accessible name lives here (the <img> is alt=""), so this must never be hidden. */
+/* Visible only while `SHOW_CAPTIONS` is true (see data/gallery.ts) — the tile then takes its
+   accessible name from here, so it must never be visually hidden. With captions off the tile
+   button carries a neutral aria-label instead. */
 .tile__caption {
   display: -webkit-box;
   -webkit-box-orient: vertical;
