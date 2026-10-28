@@ -139,19 +139,27 @@ list is here.
       tokens decide surfacing and citation; training tokens are a data-use choice only, and
       blocking them does not remove the site from answers. `anthropic-ai` / `Claude-Web` are
       retired — not re-added.
-- [x] **`Article` JSON-LD carries the real publish date** (when the 8 articles were written) —
-      never an invented or refreshed one.
+- [x] **`Article` JSON-LD carries the real publish date** (`ARTICLE_PUBLISHED`, never bumped) and a
+      separate content-updated date (`CONTENT_UPDATED`, drives `dateModified` and the sitemap
+      `<lastmod>`). The publish date is never an invented or refreshed one.
 - [x] **Article cross-links** — each article links out to related articles (`relatedArticles`)
       and services (`related`), no orphan pages.
 - [x] **This research written up** as `docs/AI-VISIBILITY.md`, with the refusals (bot-only page
       variants, hidden summary blocks, per-permutation content) recorded so they are not
       re-proposed.
+- [x] **Copy tightening pass (2026-10-28).** Fourteen near-duplicate or filler sentences dropped
+      or merged across six of the eight articles (8 insertions / 18 deletions in `poradnik.ts`),
+      deletions only — no fact added or removed, `opening`/`sourceQuestion`/`seo`/`summary` and
+      both link lists untouched. The eight `faq.ts` answers were already fully used in their
+      articles, so any *new* sentence could only be invention (forbidden) or padding.
 - [ ] **Blocked — strengthen the two thin articles** (`refundacja-nfz`, `jak-kleic-protezy`).
       Need more **owner-supplied source detail** before they can grow: no clinical fact may be
       invented (the `poradnik.ts` traceability rule).
-- [ ] **Blocked — a visible „Zaktualizowano" date on articles.** Owner decision: the articles
-      have **never been edited since publication**, so there is no update to date. Do not emit
-      an update date that nothing triggered.
+- [ ] **Owner ask — a visible „Zaktualizowano" date on articles.** The articles *have* now been
+      edited once (the tightening pass above), so a visible date would be truthful. Held back
+      because `CONTENT_UPDATED` is still `2026-10-28` — the same day they were published — so
+      showing it today reads as freshness noise, not information. Add it when a first edit lands
+      on a *later* date, or on request.
 - [ ] **Blocked — GSC Generative AI report and the GBP website link.** Owner-only (account
       access); see `docs/MEASUREMENT.md`.
 
