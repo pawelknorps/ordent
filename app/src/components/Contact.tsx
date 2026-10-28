@@ -1,5 +1,6 @@
-import { hours, nap, phones, ui } from '../data/site'
+import { hours, mapsLink, nap, phones, ui } from '../data/site'
 import MapEmbed from './MapEmbed'
+import OpenBadge from './OpenBadge'
 
 export default function Contact() {
   return (
@@ -32,14 +33,24 @@ export default function Contact() {
                   {phone.display}
                 </a>
               ))}
+              <a
+                className="btn btn--ghost btn--block contact__directions"
+                href={mapsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {ui.directions}
+              </a>
             </p>
 
             <p className="contact__hours">
-              <span className="contact__label">{ui.hoursLabel}</span> {hours}
+              <span className="contact__label">{ui.hoursLabel}</span> {hours} <OpenBadge />
             </p>
 
             <p className="callout">
-              <strong>{ui.emergencyLabel}</strong> – {ui.emergency}
+              <strong>{ui.emergencyLabel}</strong>
+              {' – '}
+              <a href={phones[0].href}>{ui.emergency}</a>
             </p>
           </div>
 

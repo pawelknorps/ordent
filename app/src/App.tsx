@@ -7,6 +7,7 @@ import Gallery from './components/Gallery'
 import Faq from './components/Faq'
 import Opinie from './components/Opinie'
 import Contact from './components/Contact'
+import CallBar from './components/CallBar'
 import Footer from './components/Footer'
 import './styles/tokens.css'
 import './styles/app.css'
@@ -28,6 +29,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <CallBar />
     </>
   )
 }

@@ -59,4 +59,10 @@ export const ui = {
   phoneLabel: 'Zadzwoń:',
   hoursLabel: 'Godziny otwarcia:',
   flagBadge: 'Robimy je jako jedyni',
+  directions: 'Nawiguj',
+  openNow: 'Otwarte teraz',
+  closedNow: 'Zamknięte',
+  reopenHint: 'otwieramy',
+  reopenToday: 'dziś',
+  fullDetails: 'Pełny opis i cennik',
 }
