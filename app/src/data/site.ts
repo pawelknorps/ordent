@@ -34,7 +34,7 @@ export const nap = {
   country: 'PL',
 }
 
-/** Coordinates taken from the original Google embed — never verified against the pin. */
+/** Coordinates from the original Google embed, confirmed against the GBP pin (53.2700978, 19.3949491). */
 export const geo = { latitude: 53.270098, longitude: 19.394949 }
 
 /** Verified Google Business Profile (ludocid) of the same place as the map embed. */
