@@ -1,6 +1,8 @@
 import type { CSSProperties, MouseEvent } from 'react'
 import type { Service } from '../data/services'
+import { ui } from '../data/site'
 import { asset } from '../lib/asset'
+import { servicePath } from '../pages/meta'
 
 // One native <dialog> per service, driven by Services.tsx's delegated click listener.
 export default function ServiceDialog({ service }: { service: Service }) {
@@ -33,9 +35,16 @@ export default function ServiceDialog({ service }: { service: Service }) {
         </button>
       </div>
       <div className="sheet__body">
-        {service.detail.paragraphs.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
+        {/* The card shows `tagline`; the dialog shows `teaser` — deliberately not the service
+            page's `paragraphs`, which on the homepage made all seven landing pages read as
+            near-duplicates of the (much stronger) homepage. The full copy lives on
+            /uslugi/<slug>/, linked immediately below. */}
+        <p>{service.teaser}</p>
+        {/* Above the price table on purpose: with the longest price list the dialog already
+            fills the screen, and a link under it would never be seen without scrolling. */}
+        <a className="btn btn--primary" href={asset(servicePath(service))}>
+          {ui.fullDetails}
+        </a>
         {service.detail.priceList && (
           <dl className="price-list">
             {service.detail.priceList.map((row) => (

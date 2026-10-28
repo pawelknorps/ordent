@@ -14,8 +14,12 @@ export type ServiceDetail = {
 
 export type Service = {
   id: string
+  slug: string
   title: string
+  seo: { title: string; description: string }
+  /** One-line card/dialog summary. Keeps the homepage from carrying the whole service page. */
   tagline: string
+  teaser: string
   price?: string
   flag?: boolean
   icon: string
@@ -25,8 +29,16 @@ export type Service = {
 export const services: Service[] = [
   {
     id: 'akrylowe',
+    slug: 'protezy-akrylowe',
     title: 'Protezy akrylowe',
+    seo: {
+      title: 'Protezy akrylowe Brodnica – pracownia ORDENT',
+      description:
+        'Tradycyjne protezy z różowego akrylu i zębami akrylowymi. Dobra estetyka, łatwa naprawa i klamry dobierane tak, by nie rzucały się w oczy. Brodnica.',
+    },
     tagline: 'Sprawdzona estetyka w przystępnej cenie.',
+    teaser:
+      'Proteza składa się z różowego akrylu imitującego podniebienie i dziąsła, a w nim osadzone są zęby akrylowe o dobranej barwie.',
     price: 'Cena: 800 – 1500 zł',
     icon: '003-tooth-13.svg',
     detail: {
@@ -39,8 +51,16 @@ export const services: Service[] = [
   },
   {
     id: 'elastyczne',
+    slug: 'protezy-elastyczne',
     title: 'Protezy elastyczne',
+    seo: {
+      title: 'Protezy elastyczne Brodnica – pracownia ORDENT',
+      description:
+        'Sprężyste protezy bez widocznych metalowych klamer: estetyka akrylu i wytrzymałość metalu. Klamry odkształcają się nawet o 40%, nie wyważają zębów.',
+    },
     tagline: 'Estetyka akrylu i wytrzymałość metalu, bez widocznych klamer.',
+    teaser:
+      'Protezy sprężyste łączą estetykę protez akrylowych z zasięgiem i utrzymaniem protez metalowych; materiał jest wytrzymały jak metal, a przy tym sprężysty.',
     price: 'Cena: 1500 – 2500 zł',
     flag: true,
     icon: '010-protection.svg',
@@ -53,8 +73,16 @@ export const services: Service[] = [
   },
   {
     id: 'szkieletowe',
+    slug: 'protezy-szkieletowe',
     title: 'Protezy szkieletowe',
+    seo: {
+      title: 'Protezy szkieletowe Brodnica – pracownia ORDENT',
+      description:
+        'Lekkie i stabilne protezy z metalu pokrytego akrylem — cienka konstrukcja, wygodne jedzenie i mówienie, łatwiejsze utrzymanie czystości.',
+    },
     tagline: 'Lekkie, mocne i komfortowe na co dzień.',
+    teaser:
+      'Proteza z elementów metalowych pokrytych akrylem. Mniejsze rozmiary i większa stabilność niż w protezie akrylowej sprawiają, że łatwiej się mówi i je.',
     price: 'Cena: 2200 – 3400 zł',
     icon: '004-tooth-12.svg',
     detail: {
@@ -66,8 +94,16 @@ export const services: Service[] = [
   },
   {
     id: 'korony',
+    slug: 'korony-i-mosty',
     title: 'Korony i mosty',
+    seo: {
+      title: 'Korony i mosty Brodnica – pracownia ORDENT',
+      description:
+        'Prace na oszlifowanych zębach własnych z dowieszką luk. Korony akrylowe i porcelanowe, wkłady koronowo-korzeniowe oraz odbudowa na implantach.',
+    },
     tagline: 'Odbudowa na własnych zębach, także z dowieszką.',
+    teaser:
+      'Prace protetyczne osadzane na oszlifowanych zębach własnych, uzupełniające luki dowieszką. Do wyboru korony akrylowe i porcelanowe, wkłady koronowo-korzeniowe oraz odbudowa na implantach.',
     icon: '017-tooth-9.svg',
     detail: {
       paragraphs: [
@@ -78,8 +114,16 @@ export const services: Service[] = [
   },
   {
     id: 'szyny',
+    slug: 'szyny',
     title: 'Szyny',
+    seo: {
+      title: 'Szyny na bruksizm Brodnica – pracownia ORDENT',
+      description:
+        'Szyna relaksacyjna na bruksizm i szczękościsk — chroni zęby i staw skroniowo-żuchwowy, pomaga, gdy zgrzytanie odbiera sen.',
+    },
     tagline: 'Na bruksizm i wybielanie — ochrona zębów i stawu skroniowo-żuchwowego.',
+    teaser:
+      'Szyna relaksacyjna dla osób zmagających się z bruksizmem. Chroni staw skroniowo-żuchwowy, a zęby przed ścieraniem się i rozchwianiem.',
     icon: '016-tooth-10.svg',
     detail: {
       paragraphs: [
@@ -89,8 +133,16 @@ export const services: Service[] = [
   },
   {
     id: 'naprawy',
+    slug: 'naprawy-protez',
     title: 'Naprawy, podścielenia i wymiana klamer na elastyczne',
+    seo: {
+      title: 'Naprawa protez Brodnica – pracownia ORDENT',
+      description:
+        'Naprawa protez zwykle w 2–4 h, czyszczenie w cenie. Dostawiamy zęby i klamry, uszczelniamy pęknięcia, wymieniamy klamry metalowe na elastyczne.',
+    },
     tagline: 'Naprawa zwykle w 2–4 h, czyszczenie w cenie.',
+    teaser:
+      'Ekspresowa naprawa, uszczelnianie i wzmacnianie protez całkowitych i częściowych, szkieletów oraz protez elastycznych. Dostawiamy zęby i klamry, klamry metalowe wymieniamy na elastyczne.',
     icon: '006-tooth-pliers.svg',
     detail: {
       paragraphs: [
@@ -112,8 +164,16 @@ export const services: Service[] = [
   },
   {
     id: 'ortodoncja',
+    slug: 'ortodoncja',
     title: 'Ortodoncja',
+    seo: {
+      title: 'Ortodoncja Brodnica – pracownia ORDENT',
+      description:
+        'Aparaty ortodontyczne i retainery, a także naprawa aparatów: pękniętej płyty, klamry czy łuku. Zadbamy też o opiekę po leczeniu.',
+    },
     tagline: 'Aparaty, retainery i naprawy — także opieka po leczeniu.',
+    teaser:
+      'Wykonujemy aparaty ortodontyczne i retainery, czyli utrzymywacze zakładane po leczeniu ortodontycznym. Zajmujemy się też naprawą aparatów: pękniętej płyty, klamry czy łuku.',
     icon: '009-braces-1.svg',
     detail: {
       paragraphs: [
