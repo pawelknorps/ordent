@@ -16,6 +16,7 @@ import {
   CENNIK_PATH,
   PORADNIK_PATH,
   ROUTES,
+  articleByPath,
   articlePath,
   headFor,
   servicePath,
@@ -23,6 +24,30 @@ import {
 
 const DESCRIPTION =
   'Pracownia protetyczna w Brodnicy. Protezy elastyczne, akrylowe i szkieletowe, korony i mosty, szyny, naprawy protez. Jako jedyni w mieście robimy protezy elastyczne.'
+
+// The day the eight poradnik articles were written. Publish dates never move: do not bump this.
+const ARTICLE_PUBLISHED = '2026-10-28'
+
+// Bump whenever any page's copy changes: every sitemap <url> carries this as its <lastmod>, and
+// article nodes use it as `dateModified`.
+const CONTENT_UPDATED = '2026-10-28'
+
+// Explicitly allowed so this site can be surfaced/cited in AI answers. Training-only crawlers
+// (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot, Amazonbot, Bytespider) stay
+// governed by `*` on purpose: blocking them is a data-use choice that does not affect whether
+// the site is cited. The retired tokens anthropic-ai / Claude-Web must not be emitted.
+const AI_CRAWLERS = [
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  'Claude-SearchBot',
+  'Claude-User',
+  'PerplexityBot',
+  'Meta-WebIndexer',
+  'Amzn-SearchBot',
+  'Googlebot',
+  'Bingbot',
+  'Applebot',
+]
 
 // „Cena: 200 – 600 zł" → { minPrice: 200, maxPrice: 600 }. An unexpected format fails the build
 // rather than silently dropping the offer from the structured data.
@@ -124,16 +149,20 @@ function serviceLd(s: Service) {
 }
 
 // The article page's own node. `publisher` points back at the `#ordent` @id declared on `/`;
-// no `author` or dates — the lab owner writes these, and inventing either would be untrue. No
+// no `author` — the lab owner writes these, and inventing one would be untrue. No
 // `AggregateRating`, per the schema policy in ADR-001.
 function articleLd(a: Article) {
+  const url = `${SITE_URL}${articlePath(a).slice(1)}`
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: a.title,
     description: a.seo.description,
-    url: `${SITE_URL}${articlePath(a).slice(1)}`,
+    url,
+    datePublished: ARTICLE_PUBLISHED,
+    dateModified: CONTENT_UPDATED,
     inLanguage: 'pl',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
     publisher: { '@type': 'LocalBusiness', '@id': `${SITE_URL}#ordent`, name: nap.name },
   }
 }
@@ -211,8 +240,11 @@ export function injectHead(html: string, path: string): string {
   set(/(<meta name="description" content=")[^"]*(")/, description)
   set(/(<meta property="og:title" content=")[^"]*(")/, title)
   set(/(<meta property="og:description" content=")[^"]*(")/, description)
+  set(/(<meta name="twitter:title" content=")[^"]*(")/, title)
+  set(/(<meta name="twitter:description" content=")[^"]*(")/, description)
   set(/(<link rel="canonical" href=")[^"]*(")/, canonical)
   set(/(<meta property="og:url" content=")[^"]*(")/, canonical)
+  set(/(<meta property="og:type" content=")[^"]*(")/, articleByPath(route) ? 'article' : 'website')
 
   out = out.replace(/<script type="application\/ld\+json" data-ordent-ld>[\s\S]*?<\/script>/g, '')
   const nodes = structuredData(route)
@@ -254,11 +286,13 @@ export default function seo(): Plugin {
       this.emitFile({
         type: 'asset',
         fileName: 'robots.txt',
-        source: `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}sitemap.xml\n`,
+        source: `User-agent: *\nAllow: /\n\n${AI_CRAWLERS.map(
+          (ua) => `User-agent: ${ua}\nAllow: /`,
+        ).join('\n\n')}\n\nSitemap: ${SITE_URL}sitemap.xml\n`,
       })
       const urls = ROUTES.map(
         (path) =>
-          `  <url>\n    <loc>${urlOf(path)}</loc>\n    <changefreq>yearly</changefreq>\n    <priority>${priority(path)}</priority>\n  </url>`,
+          `  <url>\n    <loc>${urlOf(path)}</loc>\n    <lastmod>${CONTENT_UPDATED}</lastmod>\n    <changefreq>yearly</changefreq>\n    <priority>${priority(path)}</priority>\n  </url>`,
       ).join('\n')
       this.emitFile({
         type: 'asset',
