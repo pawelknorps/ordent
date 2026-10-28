@@ -126,6 +126,41 @@ in the article data's header comment.
 
 ---
 
+## AI visibility (research pass, late 2026)
+
+Governed by **`docs/AI-VISIBILITY.md`** (decision record) — the *why* lives there; only the work
+list is here.
+
+- [x] **`robots.txt` — name the search/index crawlers, leave the training crawlers in `*`.**
+      `app/seo-plugin.ts` emits `Allow: /` for `OAI-SearchBot`, `ChatGPT-User`,
+      `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, `Meta-WebIndexer`, `Amzn-SearchBot`,
+      `Googlebot`, `Bingbot`, `Applebot`; `GPTBot`, `ClaudeBot`, `Google-Extended`,
+      `Applebot-Extended`, `CCBot`, `Amazonbot`, `Bytespider` stay unnamed under `*`. Search
+      tokens decide surfacing and citation; training tokens are a data-use choice only, and
+      blocking them does not remove the site from answers. `anthropic-ai` / `Claude-Web` are
+      retired — not re-added.
+- [x] **`Article` JSON-LD carries the real publish date** (when the 8 articles were written) —
+      never an invented or refreshed one.
+- [x] **Article cross-links** — each article links out to related articles (`relatedArticles`)
+      and services (`related`), no orphan pages.
+- [x] **This research written up** as `docs/AI-VISIBILITY.md`, with the refusals (bot-only page
+      variants, hidden summary blocks, per-permutation content) recorded so they are not
+      re-proposed.
+- [ ] **Blocked — strengthen the two thin articles** (`refundacja-nfz`, `jak-kleic-protezy`).
+      Need more **owner-supplied source detail** before they can grow: no clinical fact may be
+      invented (the `poradnik.ts` traceability rule).
+- [ ] **Blocked — a visible „Zaktualizowano" date on articles.** Owner decision: the articles
+      have **never been edited since publication**, so there is no update to date. Do not emit
+      an update date that nothing triggered.
+- [ ] **Blocked — GSC Generative AI report and the GBP website link.** Owner-only (account
+      access); see `docs/MEASUREMENT.md`.
+
+**Exit criteria:** `robots.txt` in the built output names the search bots and blocks none of the
+training bots; `docs/AI-VISIBILITY.md` records the decisions; measurement reads GSC's Generative
+AI report plus the local metrics, **not** third-party "AI visibility" scores.
+
+---
+
 ## Ongoing (never finishes)
 
 Reviews requested from every patient and every review replied to; weekly GBP posts; photos
@@ -143,6 +178,8 @@ added monthly; prices, hours and NAP kept identical across site, GBP and all cit
 | Stay `LocalBusiness`; no `AggregateRating`; no `Dentist`/`MedicalClinic` | `docs/ADR-001-...` | We are a lab, not a provider; self-serving rating markup risks a penalty. |
 | No contact form | this file | Phone-first business; a form adds a lead drop-off, not a lead. |
 | `SITE_URL` is the single source of the public address | `docs/DOMAIN-CUTOVER.md` | Canonical/og/robots/sitemap/JSON-LD/base all derive from it. |
+| `robots.txt` names the search/index bots; training bots are left to `*` | `docs/AI-VISIBILITY.md` | Search tokens decide surfacing and citation; training tokens are a data-use choice only — blocking them removes nothing from answers. |
+| No `llms.txt`; JSON-LD kept but not sold as an AI lever | `docs/AI-VISIBILITY.md` | Google ignores `llms.txt` (Ahrefs: 97% of ~137k files saw zero requests); structured data earns rich results in Search but has no measured AI-citation lift. |
 
 ---
 
@@ -168,6 +205,7 @@ premature; ADR-001 records the triggers that would reopen the first two.
 | Prerender/hydration mismatch on time-dependent UI | Open-now badge renders neutral first and computes in `useEffect` — never during render. |
 | Anchor deep links break when service content moves to its own URL | Re-tested after the route split: all 7 dialogs open cleanly at 390×844, one teaser each, link to `/uslugi/<slug>/` visible without scrolling. Re-check if the price tables or teaser copy grow. |
 | GBP hours/NAP drift from the site | One source (`site.ts`); GBP updated by hand in the same week. |
+| Generated `robots.txt` is inert at the `pawelknorps.github.io/ordent/` subpath — crawlers read it only at the domain root | Harmless today: `*` allows, so nothing is blocked. It becomes authoritative at the `ordent.pl` cutover. Do not change `SITE_URL` before DNS resolves (`docs/AI-VISIBILITY.md` §6). |
 | ~~`geo` coordinates in `site.ts` are the map-view centre, never verified against the pin~~ **Resolved 2026-10-28** | Checked against the GBP pin URL (`@53.2700978,19.3949491`): matches to 6 decimals. Safe in JSON-LD. |
 | ~~Hero still oversized: `hero.jpg` 67 KB / 1900×750, `<link rel="preload">`ed and the likely mobile LCP element~~ **Resolved 2026-10-28** | Moved to a responsive `<picture>` (`hero-{480,960,1900}.{jpg,webp}`, 10.5/28.3/66.8 KB JPEG); the 1900 step is byte-identical to the old file, so framing is unchanged. The preload was removed with it. One un-resized still remains: `map.jpg` (1024×512, 74 KB, hand-composed OSM tiles, CSS background) — accepted, a static facade has no responsive consumer. |
 
