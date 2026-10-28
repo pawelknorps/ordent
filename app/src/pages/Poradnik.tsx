@@ -1,4 +1,4 @@
-import CallBar from '../components/CallBar'
+import PageShell from '../components/PageShell'
 import { pages } from '../data/pages'
 import { articles } from '../data/poradnik'
 import { asset } from '../lib/asset'
@@ -11,35 +11,37 @@ export default function Poradnik() {
   const page = pages[PORADNIK_PATH]
 
   return (
-    <main className="section">
-      <div className="container">
-        <nav aria-label="Główna">
-          <a className="wordmark" href={asset('/')}>ORDENT</a>
-        </nav>
-
-        <div className="section__head">
-          <h1>{page.h1}</h1>
-          <p>{page.description}</p>
-        </div>
-
-        <div className="services__grid">
-          {articles.map((article) => (
-            <article className="svc-card" key={article.slug}>
-              <h2 className="svc-card__title">
-                <a href={asset(articlePath(article))}>{article.title}</a>
-              </h2>
-              <p className="svc-card__tagline">{article.summary}</p>
-            </article>
-          ))}
-        </div>
-
-        <p>
-          <a href={asset(CENNIK_PATH)}>Pełny cennik</a>
-        </p>
+    <PageShell
+      trail={[
+        { name: 'Start', href: asset('/') },
+        { name: page.h1, href: asset(PORADNIK_PATH) },
+      ]}
+    >
+      <div className="page-head">
+        <h1>{page.h1}</h1>
+        <p className="lead">{page.description}</p>
       </div>
-      {/* The sub-pages render no App shell, so the fixed call bar is mounted here; a small
-          screen would otherwise reserve the call-bar padding (see sections.css) for nothing. */}
-      <CallBar />
-    </main>
+
+      <div className="services__grid">
+        {articles.map((article) => (
+          <article className="svc-card" key={article.slug}>
+            <h2 className="svc-card__title">
+              <a href={asset(articlePath(article))}>{article.title}</a>
+            </h2>
+            <p className="svc-card__tagline">{article.summary}</p>
+          </article>
+        ))}
+      </div>
+
+      <section className="others" aria-labelledby="see-also-title">
+        <h2 id="see-also-title">Zobacz też</h2>
+        <div className="services__grid">
+          <a className="svc-card" href={asset(CENNIK_PATH)}>
+            <h3 className="svc-card__title">Pełny cennik</h3>
+            <p className="svc-card__tagline">{pages[CENNIK_PATH].description}</p>
+          </a>
+        </div>
+      </section>
+    </PageShell>
   )
 }

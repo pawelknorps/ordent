@@ -1,4 +1,4 @@
-import CallBar from '../components/CallBar'
+import PageShell from '../components/PageShell'
 import { pages } from '../data/pages'
 import { services } from '../data/services'
 import { phones } from '../data/site'
@@ -12,41 +12,43 @@ export default function Cennik() {
   const page = pages[CENNIK_PATH]
 
   return (
-    <main className="section">
-      <div className="container">
-        <nav aria-label="Główna">
-          <a className="wordmark" href={asset('/')}>ORDENT</a>
-        </nav>
-
-        <div className="section__head">
-          <h1>{page.h1}</h1>
-          <p>{page.description}</p>
-          <p>
-            Cennik obowiązuje w pracowni w Brodnicy. Zadzwoń, żeby potwierdzić termin:{' '}
-            <a href={phones[0].href}>{phones[0].display}</a>.
-          </p>
-        </div>
-
-        <div className="services__grid">
-          {services.map((service) => (
-            <article className="svc-card" key={service.id}>
-              <h2 className="svc-card__title">{service.title}</h2>
-              <p className="svc-card__tagline">{service.tagline}</p>
-              <PriceList service={service} />
-              <a className="btn btn--ghost" href={asset(servicePath(service))}>
-                {service.title} — szczegóły
-              </a>
-            </article>
-          ))}
-        </div>
-
+    <PageShell
+      trail={[
+        { name: 'Start', href: asset('/') },
+        { name: page.h1, href: asset(CENNIK_PATH) },
+      ]}
+    >
+      <div className="page-head">
+        <h1>{page.h1}</h1>
+        <p className="lead">{page.description}</p>
         <p>
-          <a href={asset(PORADNIK_PATH)}>Poradnik pacjenta</a>
+          Cennik obowiązuje w pracowni w Brodnicy. Zadzwoń, żeby potwierdzić termin:{' '}
+          <a href={phones[0].href}>{phones[0].display}</a>.
         </p>
       </div>
-      {/* The sub-pages render no App shell, so the fixed call bar is mounted here; a small
-          screen would otherwise reserve the call-bar padding (see sections.css) for nothing. */}
-      <CallBar />
-    </main>
+
+      <div className="services__grid">
+        {services.map((service) => (
+          <article className="svc-card" key={service.id}>
+            <h2 className="svc-card__title">{service.title}</h2>
+            <p className="svc-card__tagline">{service.tagline}</p>
+            <PriceList service={service} />
+            <a className="btn btn--ghost" href={asset(servicePath(service))}>
+              {service.title} — szczegóły
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <section className="others" aria-labelledby="see-also-title">
+        <h2 id="see-also-title">Zobacz też</h2>
+        <div className="services__grid">
+          <a className="svc-card" href={asset(PORADNIK_PATH)}>
+            <h3 className="svc-card__title">Poradnik pacjenta</h3>
+            <p className="svc-card__tagline">{pages[PORADNIK_PATH].description}</p>
+          </a>
+        </div>
+      </section>
+    </PageShell>
   )
 }
