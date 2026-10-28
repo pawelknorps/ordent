@@ -28,6 +28,16 @@ describe('article content', () => {
       expect(questions).toContain(article.sourceQuestion)
     }
   })
+
+  it('links only to existing sibling articles, never to itself', () => {
+    const slugs = articles.map((a) => a.slug)
+    for (const article of articles) {
+      for (const slug of article.relatedArticles) {
+        expect(slugs).toContain(slug)
+        expect(slug).not.toBe(article.slug)
+      }
+    }
+  })
 })
 
 describe('routes', () => {

@@ -1,15 +1,18 @@
 import { Fragment } from 'react'
 import CallBar from '../components/CallBar'
-import type { Article } from '../data/poradnik'
+import { articles, type Article } from '../data/poradnik'
 import { services } from '../data/services'
 import { asset } from '../lib/asset'
-import { CENNIK_PATH, PORADNIK_PATH, servicePath } from './meta'
+import { CENNIK_PATH, PORADNIK_PATH, articlePath, servicePath } from './meta'
 
 // Full article copy on its own indexable URL, one per /poradnik/<slug>/ (ADR-001). Everything
 // here comes from the article data — the owner-written FAQ answer plus the service paragraphs;
 // the page adds only the framing, never a new fact.
 export default function PoradnikArticle({ article }: { article: Article }) {
   const related = services.filter((s) => article.related.includes(s.slug))
+  const relatedArticles = article.relatedArticles.map(
+    (slug) => articles.find((a) => a.slug === slug)!,
+  )
 
   return (
     <main className="section">
@@ -44,6 +47,11 @@ export default function PoradnikArticle({ article }: { article: Article }) {
             <li>
               <a href={asset(CENNIK_PATH)}>Pełny cennik</a>
             </li>
+            {relatedArticles.map((a) => (
+              <li key={a.slug}>
+                <a href={asset(articlePath(a))}>{a.title}</a>
+              </li>
+            ))}
             {related.map((service) => (
               <li key={service.id}>
                 <a href={asset(servicePath(service))}>{service.title}</a>

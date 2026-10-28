@@ -18,6 +18,8 @@ export type Article = {
   opening: string
   /** Slugs from services.ts offered as further reading on the article page. */
   related: string[]
+  /** Same-topic sibling articles surfaced as further reading — curated by hand, not derived. */
+  relatedArticles: string[]
   sections: { heading: string; body: string[] }[]
 }
 
@@ -36,6 +38,7 @@ export const articles: Article[] = [
     opening:
       'Z reguły jesteśmy w stanie zmieścić się w ciągu tygodnia. Termin uzależniony jest od dostępności koloru zębów, potrzeby wykonania wzornika oraz ewentualnej poprawy ustawienia zębów w wosku. Jesteśmy też w stanie wykonać uzupełnienie protetyczne w 2 lub 3 dni, za niedużą opłatą.',
     related: ['protezy-akrylowe', 'protezy-elastyczne'],
+    relatedArticles: ['jak-czesto-wymieniac-protezy', 'refundacja-nfz'],
     sections: [
       {
         heading: 'Co wpływa na termin',
@@ -75,6 +78,7 @@ export const articles: Article[] = [
     opening:
       'W przypadku pojawienia się bólu, ran lub odruchu wymiotnego zalecamy zdjęcie protezy i wizytę w naszym laboratorium, celem odciążenia bolących miejsc poprzez odjęcie materiału protezy. Nie polecamy próbowania na siłę noszenia „bo może przejdzie”, gdyż tylko wydłużymy okres rekonwalescencji. Z reguły nasze protezy leżą jak ulał, niekiedy jednak potrzeba kilku bezpłatnych wizyt korekcyjnych. W razie czego można zaopatrzyć się w aptece w Sachol.',
     related: ['naprawy-protez', 'protezy-akrylowe'],
+    relatedArticles: ['czy-spac-w-protezach', 'jak-kleic-protezy'],
     sections: [
       {
         heading: 'Dlaczego nie warto nosić na siłę',
@@ -114,6 +118,7 @@ export const articles: Article[] = [
     opening:
       'W przypadku niedostatecznych warunków wewnątrzustnych — niskich wyrostków lub braku możliwości zassania protezy — warto stosować klej do protez. Ważna jest jednak ilość nakładana jednorazowo na protezę. Na protezie górnej od strony podniebiennej nałóż 3 nieduże „kleksy” po bokach i z przodu, a w protezie dolnej 2 nieduże „kleksy” po bokach. Dopiero wtedy klej do protez pomoże w lepszym utrzymaniu.',
     related: ['protezy-akrylowe', 'protezy-elastyczne'],
+    relatedArticles: ['bol-rana-i-odruch-wymiotny', 'pielegnacja-protez', 'czy-spac-w-protezach'],
     sections: [
       {
         heading: 'Kiedy klej do protez ma sens',
@@ -154,6 +159,7 @@ export const articles: Article[] = [
     opening:
       'Protezę należy myć tak często jak zęby własne, czyli 2 razy dziennie. Po każdym posiłku powinna być oczyszczona z resztek pokarmowych. Do czyszczenia używa się szczoteczki do zębów, najlepiej z miękkiego włosia, oraz pasty o niskim współczynniku ścieralności albo specjalnych środków do czyszczenia protez. Przed założeniem dokładnie wypłucz protezę pod bieżącą wodą.',
     related: ['protezy-szkieletowe', 'protezy-akrylowe'],
+    relatedArticles: ['czy-spac-w-protezach', 'jak-myc-zeby', 'jak-czesto-wymieniac-protezy'],
     sections: [
       {
         heading: 'Jak często czyścić protezę',
@@ -200,6 +206,7 @@ export const articles: Article[] = [
     opening:
       'Niektórzy twierdzą, że protezy powinno się zdejmować na noc i przechowywać w zamkniętym pudełeczku, na sucho. My mamy inne spostrzeżenia. W pierwszych dniach od otrzymania gotowych protez warto zdejmować je na noc — to pomaga przyzwyczaić tkanki wewnątrzustne i uniknąć ewentualnych ran, których przyczyną bywa np. za długa proteza, wymagająca lekkiego przycięcia. Z reguły nasze protezy leżą jak ulał, niekiedy jednak potrzeba kilku wizyt korekcyjnych, żeby odjąć materiał w bolących miejscach. Po okresie przystosowawczym zalecamy spanie w protezach, gdyż tkanki nieuciskane zanikają, co powoduje obkurczanie wyrostków zębodołowych. W efekcie powstaje przestrzeń między protezą a tkanką pacjenta i proteza trzyma się gorzej.',
     related: ['protezy-akrylowe', 'protezy-elastyczne'],
+    relatedArticles: ['pielegnacja-protez', 'bol-rana-i-odruch-wymiotny', 'jak-czesto-wymieniac-protezy'],
     sections: [
       {
         heading: 'Pierwsze dni po odebraniu protezy',
@@ -238,6 +245,7 @@ export const articles: Article[] = [
     opening:
       'Zęby własne powinno się myć 2 razy dziennie szczoteczką średniotwardą lub twardą, przez około 2 minuty. Mycie zębów nie polega jednak na robieniu okrężnych ruchów po zębach, a na czyszczeniu przestrzeni międzyzębowych. To tam gromadzą się pozostałości po jedzeniu oraz bakterie niszczące zęby i przyzębie. Wchodź więc włosiem szczoteczki w przestrzenie międzyzębowe pod kątem 45 stopni i ruchem wymiatającym usuwaj to, co z reguły się omija. Przez pierwsze dni pojawi się ból i krew, ale to dobrze. Po tygodniu lub dwóch objawy znikną, a ty będziesz cieszyć się długimi latami zdrowych i mocnych zębów.',
     related: ['protezy-elastyczne', 'szyny'],
+    relatedArticles: ['pielegnacja-protez', 'czy-spac-w-protezach'],
     sections: [
       {
         heading: 'Dlaczego przestrzenie międzyzębowe są najważniejsze',
@@ -279,6 +287,7 @@ export const articles: Article[] = [
     opening:
       'To zależy od każdego przypadku, jednak reguła to 5 lat. Co tyle zresztą NFZ refunduje wykonanie nowych protez zębowych powyżej 5 zębów. Czasami protezę trzeba wymienić prędzej, gdyż zbyt dużo straciliśmy zębów albo zbyt mocno zmieniły się warunki zewnątrzustne — nawet różnica wagi pacjenta wynosząca 5 kg potrafi sprawić, że proteza przestaje pasować. Jeśli jednak zęby sztuczne nie uległy zbytniemu starciu, proteza dobrze się trzyma i odpowiednio dbamy o jej higienę, można nawet — znamy takie przypadki — nosić jedną protezę przez 15 lat.',
     related: ['naprawy-protez', 'protezy-elastyczne'],
+    relatedArticles: ['jak-dlugo-czeka-sie-na-proteze', 'refundacja-nfz', 'pielegnacja-protez'],
     sections: [
       {
         heading: 'Dlaczego reguła to 5 lat',
@@ -324,6 +333,7 @@ export const articles: Article[] = [
     opening:
       'Refundacja zależy od indywidualnego przypadku — reguła to 5 lat. W celu uzyskania szczegółowych informacji prosimy o kontakt telefoniczny.',
     related: ['protezy-akrylowe', 'protezy-elastyczne'],
+    relatedArticles: ['jak-czesto-wymieniac-protezy', 'jak-dlugo-czeka-sie-na-proteze'],
     sections: [
       {
         heading: 'Co mówi reguła 5 lat',
